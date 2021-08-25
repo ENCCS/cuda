@@ -10,14 +10,14 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-# import os
-# import sys
-# sys.path.insert(0, os.path.abspath('.'))
+import os
+import sys
+sys.path.insert(0, os.path.abspath('.'))
 
 
 # -- Project information -----------------------------------------------------
 
-project = "Introduction"
+project = "CUDA training materials"
 copyright = "2021, Artem Zhmurov and individual contributors."
 author = "Artem Zhmurov and individual contributors."
 github_user = "zhmurov"
@@ -104,24 +104,17 @@ html_context = {
 #    'seaborn': ('https://seaborn.pydata.org/', None),
 # }
 
-# add few new directives
-from sphinx_lesson.directives import _BaseCRDirective
+# Our own customisation
+from custom import DIRECTIVES, cuda_glossary
 
+# the epilog
+rst_epilog = f"""
+.. role:: red
+.. role:: blue
+.. _CMake: https://cmake.org/cmake/help/v3.19/
 
-class SignatureDirective(_BaseCRDirective):
-    extra_classes = ["toggle-shown", "dropdown"]
-
-
-class ParametersDirective(_BaseCRDirective):
-    extra_classes = ["dropdown"]
-
-
-class TypealongDirective(_BaseCRDirective):
-    extra_classes = ["toggle-shown", "dropdown"]
-
-
-DIRECTIVES = [SignatureDirective, ParametersDirective, TypealongDirective]
-
+{cuda_glossary()}
+"""
 
 def setup(app):
     for obj in DIRECTIVES:

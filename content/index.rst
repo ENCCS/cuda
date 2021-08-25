@@ -1,5 +1,5 @@
-Introduction
-============
+CUDA training
+=============
 
 
 Intro
@@ -11,17 +11,17 @@ Intro
    prerequisites
 
 
-
-.. csv-table::
-   :widths: auto
-   :delim: ;
-
-   20 min ; :doc:`filename`
-
-
 .. toctree::
    :maxdepth: 1
-   :caption: The lesson
+   :caption: Table of contents
+
+   1.01_GPUIntroduction
+   2.01_DeviceQuery
+   2.02_HelloCUDA
+   2.03_VectorAdd
+   2.04_HeatEquation
+   3.01_ParallelReduction1
+   3.02_TaskParallelism
 
 
 .. toctree::

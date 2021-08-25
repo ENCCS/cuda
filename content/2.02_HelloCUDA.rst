@@ -1,0 +1,8 @@
+.. _launch_kernel:
+
+Launching the GPU kernel
+========================
+
+Hello, CUDA!
+-------------
+
