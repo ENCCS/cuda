@@ -57,12 +57,12 @@ Let us start with exploring the data parallelism first.
 
         .. tab:: C++ code
 
-            .. literalinclude:: ../examples/CUDA/Async1/solution/async_cpu.cpp
+            .. literalinclude:: ../examples/3.02_TaskParallelism/Async1/async_cpu.cpp
                 :language: c++
       
         .. tab:: Solution
 
-            .. literalinclude:: ../examples/CUDA/Async1/solution/async_gpu_1.cu
+            .. literalinclude:: ../examples/3.02_TaskParallelism/Async1/Solution/async_gpu_1.cu
                 :language: CUDA
 
     Convert the CPU code to GPU code.
@@ -204,12 +204,12 @@ Now we have all the means to execute the data transfers and kernel calls asynchr
 
         .. tab:: Synchronos code
 
-            .. literalinclude:: ../examples/CUDA/Async1/solution/async_gpu_1.cu
+            .. literalinclude:: ../examples/3.02_TaskParallelism/Async1/Solution/async_gpu_1.cu
                 :language: CUDA
       
         .. tab:: Asynchronos code
 
-            .. literalinclude:: ../examples/CUDA/Async1/solution/async_gpu_2.cu
+            .. literalinclude:: ../examples/3.02_TaskParallelism/Async1/Solution/async_gpu_2.cu
                 :language: CUDA
 
     1. The CPU data needs to be pinned.
@@ -255,17 +255,17 @@ This is easy to da in the synchronous version of the program.
 
         .. tab:: Syncronous code with independent kernels
 
-            .. literalinclude:: ../examples/CUDA/Async1/solution/async_gpu_1.cu
+            .. literalinclude:: ../examples/3.02_TaskParallelism/Async1/Solution/async_gpu_1.cu
                 :language: CUDA
         
         .. tab:: C++ code
 
-            .. literalinclude:: ../examples/CUDA/Async2/solution/async_cpu.cpp
+            .. literalinclude:: ../examples/3.02_TaskParallelism/Async2/async_cpu.cpp
                 :language: c++
       
         .. tab:: Syncronous code with dependencies between kernels
 
-            .. literalinclude:: ../examples/CUDA/Async2/solution/async_gpu_1.cu
+            .. literalinclude:: ../examples/3.02_TaskParallelism/Async2/Solution/async_gpu_1.cu
                 :language: CUDA
 
     Create the synchronos version of the GPU code with dependency.
@@ -282,12 +282,12 @@ Let us now try to convert the code so it will run asynchronously as if there is 
 
         .. tab:: Syncronous code with independent kernels
 
-            .. literalinclude:: ../examples/CUDA/Async2/solution/async_gpu_1.cu
+            .. literalinclude:: ../examples/3.02_TaskParallelism/Async2/Solution/async_gpu_1.cu
                 :language: CUDA
       
         .. tab:: Syncronous code with dependencies between kernels
 
-            .. literalinclude:: ../examples/CUDA/Async2/solution/async_gpu_2.cu
+            .. literalinclude:: ../examples/3.02_TaskParallelism/Async2/Solution/async_gpu_2.cu
                 :language: CUDA
 
     1. The CPU data needs to be pinned.
@@ -367,17 +367,17 @@ For this to be useful, the stream should be diferent to the one where event was 
 
         .. tab:: Syncronous code with independent kernels
 
-            .. literalinclude:: ../examples/CUDA/Async2/solution/async_gpu_1.cu
+            .. literalinclude:: ../examples/3.02_TaskParallelism/Async2/Solution/async_gpu_1.cu
                 :language: CUDA
       
         .. tab:: Syncronous code with dependencies between kernels
 
-            .. literalinclude:: ../examples/CUDA/Async2/solution/async_gpu_3.cu
+            .. literalinclude:: ../examples/3.02_TaskParallelism/Async2/Solution/async_gpu_3.cu
                 :language: CUDA
 
         .. tab:: Syncronous code with dependencies between kernels
 
-            .. literalinclude:: ../examples/CUDA/Async2/solution/async_gpu_4.cu
+            .. literalinclude:: ../examples/3.02_TaskParallelism/Async2/Solution/async_gpu_4.cu
                 :language: CUDA
 
     The problem can be solved by adding an extra |cudaDeviceSynchronize| function call, but this approach is not very flexible.

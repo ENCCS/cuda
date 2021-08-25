@@ -123,12 +123,12 @@ Since we are also using it when populating the initial conditions, we need a |__
 
         .. tab:: C++
 
-            .. literalinclude:: ../examples/CUDA/HeatEquation/heat_equation.cpp
+            .. literalinclude:: ../examples/2.04_HeatEquation/heat_equation.cpp
                 :language: CUDA
 
         .. tab:: CUDA (solution)
 
-            .. literalinclude:: ../examples/CUDA/HeatEquation/solution/heat_equation_gpu_1.cu
+            .. literalinclude:: ../examples/2.04_HeatEquation/Solution/heat_equation_gpu_1.cu
                 :language: CUDA
     
     1. Change the extension to ``.cu``, add device buffers, allocate memory.
@@ -200,12 +200,12 @@ In the following exercise we will eliminate the unnessesary data transfers and w
 
         .. tab:: CUDA
 
-            .. literalinclude:: ../examples/CUDA/HeatEquation/solution/heat_equation_gpu_1.cu
+            .. literalinclude:: ../examples/2.04_HeatEquation/Solution/heat_equation_gpu_1.cu
                 :language: CUDA
 
         .. tab:: CUDA: device owns the data (solution)
 
-            .. literalinclude:: ../examples/CUDA/HeatEquation/solution/heat_equation_gpu_2_remove_copy_calls.cu
+            .. literalinclude:: ../examples/2.04_HeatEquation/Solution/heat_equation_gpu_2_remove_copy_calls.cu
                 :language: CUDA
 
     1. Use the solution of the previous example as a starting point.
@@ -272,12 +272,12 @@ In the following example, we will change the GPU kernel to use the shared memory
 
         .. tab:: CUDA: device owns the data
 
-            .. literalinclude:: ../examples/CUDA/HeatEquation/solution/heat_equation_gpu_2_remove_copy_calls.cu
+            .. literalinclude:: ../examples/2.04_HeatEquation/Solution/heat_equation_gpu_2_remove_copy_calls.cu
                 :language: CUDA
 
         .. tab:: CUDA: use shared memory (solution)
 
-            .. literalinclude:: ../examples/CUDA/HeatEquation/solution/heat_equation_gpu_3_shared_memory.cu
+            .. literalinclude:: ../examples/2.04_HeatEquation/Solution/heat_equation_gpu_3_shared_memory.cu
                 :language: CUDA
 
     1. Use the previous version of the code as a starting point.

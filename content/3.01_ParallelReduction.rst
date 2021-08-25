@@ -60,12 +60,12 @@ So either extra condition should be added ot the array should be extended by zer
 
         .. tab:: C++
 
-            .. literalinclude:: ../examples/CUDA/Reduction/solution/reduction_cpu_1.cpp
+            .. literalinclude:: ../examples/3.01_ParallelReduction/reduction_cpu_1.cpp
                 :language: c++
 
         .. tab:: CUDA
 
-            .. literalinclude:: ../examples/CUDA/Reduction/solution/reduction_gpu_1.cu
+            .. literalinclude:: ../examples/3.01_ParallelReduction/Solution/reduction_gpu_1.cu
                 :language: CUDA
 
     Converty the C++ code to CUDA using atomic operations.
@@ -159,12 +159,12 @@ Let us fix the CPU code with the approach described by the figure above.
 
         .. tab:: Initial C++
 
-            .. literalinclude:: ../examples/CUDA/Reduction/solution/reduction_cpu_1.cpp
+            .. literalinclude:: ../examples/3.01_ParallelReduction/reduction_cpu_1.cpp
                 :language: c++
         
         .. tab:: Fixed C++
 
-            .. literalinclude:: ../examples/CUDA/Reduction/solution/reduction_cpu_2.cpp
+            .. literalinclude:: ../examples/3.01_ParallelReduction/Solution/reduction_cpu_2.cpp
                 :language: c++
 
     1. Since, we are doing the reduction one element at a time, we will now need an array to hold the reduction results.
@@ -204,12 +204,12 @@ Let us use the same approach to fix the GPU code.
         
         .. tab:: Fixed C++
 
-            .. literalinclude:: ../examples/CUDA/Reduction/solution/reduction_cpu_2.cpp
+            .. literalinclude:: ../examples/3.01_ParallelReduction/Solution/reduction_cpu_2.cpp
                 :language: c++
       
         .. tab:: Fixed CUDA
 
-            .. literalinclude:: ../examples/CUDA/Reduction/solution/reduction_gpu_2.cu
+            .. literalinclude:: ../examples/3.01_ParallelReduction/Solution/reduction_gpu_2.cu
                 :language: CUDA
 
     1. Change the extension of the file to ``.cu`` so that the ``nvcc`` expects GPU code in it.
@@ -343,12 +343,12 @@ Note that we will need to synchronize threads in multiple places to make sure th
 
         .. tab:: CUDA with direct memory calls
 
-            .. literalinclude:: ../examples/CUDA/Reduction/solution/reduction_cpu_2.cpp
+            .. literalinclude:: ../examples/3.01_ParallelReduction/Solution/reduction_cpu_2.cpp
                 :language: c++
       
         .. tab:: CUDA with shared memory
 
-            .. literalinclude:: ../examples/CUDA/Reduction/solution/reduction_gpu_3.cu
+            .. literalinclude:: ../examples/3.01_ParallelReduction/Solution/reduction_gpu_3.cu
                 :language: CUDA
 
     1. First, let us introduce the shared memory array to the code.
@@ -414,12 +414,12 @@ Let us try to modify the code so that the first threads in the block do the redu
 
         .. tab:: CUDA with shared memory
 
-            .. literalinclude:: ../examples/CUDA/Reduction/solution/reduction_gpu_3.cu
+            .. literalinclude:: ../examples/3.01_ParallelReduction/Solution/reduction_gpu_3.cu
                 :language: c++
       
         .. tab:: CUDA with less thread divergency
 
-            .. literalinclude:: ../examples/CUDA/Reduction/solution/reduction_gpu_4.cu
+            .. literalinclude:: ../examples/3.01_ParallelReduction/Solution/reduction_gpu_4.cu
                 :language: CUDA
 
     1. Change the thread indexing where to make sure that first threads are doing the reduction.
@@ -452,12 +452,12 @@ The offset, or separation value, will be reduced from one iteration to the other
 
         .. tab:: CUDA with less thread divergency
 
-            .. literalinclude:: ../examples/CUDA/Reduction/solution/reduction_gpu_4.cu
+            .. literalinclude:: ../examples/3.01_ParallelReduction/Solution/reduction_gpu_4.cu
                 :language: c++
       
         .. tab:: CUDA with sequential memory access
 
-            .. literalinclude:: ../examples/CUDA/Reduction/solution/reduction_gpu_5.cu
+            .. literalinclude:: ../examples/3.01_ParallelReduction/Solution/reduction_gpu_5.cu
                 :language: CUDA
 
     1. Change the loop over the offset values so that the offset goes from hald of the block size to 1.
@@ -486,12 +486,12 @@ In this case all threads will have some computations to do and less resources wi
 
         .. tab:: CUDA with sequential memory access
 
-            .. literalinclude:: ../examples/CUDA/Reduction/solution/reduction_gpu_5.cu
+            .. literalinclude:: ../examples/3.01_ParallelReduction/Solution/reduction_gpu_5.cu
                 :language: c++
       
         .. tab:: CUDA with loading two elements at a time
 
-            .. literalinclude:: ../examples/CUDA/Reduction/solution/reduction_gpu_6.cu
+            .. literalinclude:: ../examples/3.01_ParallelReduction/Solution/reduction_gpu_6.cu
                 :language: CUDA
 
     1. Change the part of the code where the values are saved to the shared memory so that two values are read simultaneously and the first pairwise reduction is done.
@@ -534,12 +534,12 @@ But since there are the threads that actually do the work, the inactive threads 
 
         .. tab:: CUDA with loading two elements at a time
 
-            .. literalinclude:: ../examples/CUDA/Reduction/solution/reduction_gpu_6.cu
+            .. literalinclude:: ../examples/3.01_ParallelReduction/Solution/reduction_gpu_6.cu
                 :language: c++
       
         .. tab:: CUDA with unrolling the last warp of threads
 
-            .. literalinclude:: ../examples/CUDA/Reduction/solution/reduction_gpu_7.cu
+            .. literalinclude:: ../examples/3.01_ParallelReduction/Solution/reduction_gpu_7.cu
                 :language: CUDA
 
     1. Create a separate |__device__| function that will handle the last warp reduction.

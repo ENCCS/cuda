@@ -15,17 +15,17 @@ We will start with a basic ``.cpp`` code, change it so it will be compiled by CU
 
       .. tab:: C++
 
-         .. literalinclude:: ../examples/CUDA/DeviceList/list_devices.cpp
+         .. literalinclude:: ../examples/2.01_DeviceQuery/list_devices.cpp
             :language: c++
 
       .. tab:: Solution
 
-         .. literalinclude:: ../examples/CUDA/DeviceList/list_devices_ref.cu
+         .. literalinclude:: ../examples/2.01_DeviceQuery/Solution/list_devices_ref.cu
             :language: CUDA
       
       .. tab:: Extended solution
 
-         .. literalinclude:: ../examples/CUDA/DeviceList/list_devices_ref_extended.cu
+         .. literalinclude:: ../examples/2.01_DeviceQuery/Solution/list_devices_ref_extended.cu
             :language: CUDA
 
    1. We need the compiler to be aware that it is dealing with source file that may contain CUDA code.

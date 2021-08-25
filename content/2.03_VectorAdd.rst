@@ -12,22 +12,22 @@ This will allow us to get familiar with basic CUDA API that are essential for wr
 
       .. tab:: C++
 
-         .. literalinclude:: ../examples/CUDA/VectorAdd/vector_add.cpp
+         .. literalinclude:: ../examples/2.03_VectorAdd/VectorAdd/vector_add.cpp
             :language: c++
 
       .. tab:: CUDA stub
 
-         .. literalinclude:: ../examples/CUDA/VectorAdd/vector_add_gpu.cu
+         .. literalinclude:: ../examples/2.03_VectorAdd/VectorAdd/vector_add_gpu.cu
             :language: CUDA
     
       .. tab:: Add GPU data management
 
-         .. literalinclude:: ../examples/CUDA/VectorAdd/vector_add_gpu_data_management.cu
+         .. literalinclude:: ../examples/2.03_VectorAdd/VectorAdd/Solution/vector_add_gpu_data_management.cu
             :language: CUDA
       
       .. tab:: Full solution
 
-         .. literalinclude:: ../examples/CUDA/VectorAdd/vector_add_gpu_ref.cu
+         .. literalinclude:: ../examples/2.03_VectorAdd/VectorAdd/Solution/vector_add_gpu_ref.cu
             :language: CUDA
 
    1. Familiarize yourself with the CPU version of the code.
@@ -252,17 +252,17 @@ The ``threadIdx``, ``blockIdx`` and ``blockDim`` variables are all of type ``uin
 
       .. tab:: C++
 
-         .. literalinclude:: ../examples/CUDA/VectorDotProduct/vector_dot_product.cpp
+         .. literalinclude:: ../examples/2.03_VectorAdd/VectorDotProduct/vector_dot_product.cpp
             :language: c++
 
       .. tab:: CUDA stub
 
-         .. literalinclude:: ../examples/CUDA/VectorDotProduct/vector_dot_product_gpu.cu
+         .. literalinclude:: ../examples/2.03_VectorAdd/VectorDotProduct/vector_dot_product_gpu.cu
             :language: CUDA
     
       .. tab:: Solution
 
-         .. literalinclude:: ../examples/CUDA/VectorDotProduct/vector_dot_product_gpu_ref.cu
+         .. literalinclude:: ../examples/2.03_VectorAdd/VectorDotProduct/Solution/vector_dot_product_gpu_ref.cu
             :language: CUDA
 
       Note that .cpp file has to both be compiled with nvcc and have ``#include <cuda_runtime.h>`` line.
@@ -314,17 +314,17 @@ Having more than one dimension can be useful when working with two- or three-dim
 
       .. tab:: C++
 
-         .. literalinclude:: ../examples/CUDA/MatrixAdd/matrix_add.cpp
+         .. literalinclude:: ../examples/2.03_VectorAdd/MatrixAdd/matrix_add.cpp
             :language: c++
 
       .. tab:: CUDA stub
 
-         .. literalinclude:: ../examples/CUDA/MatrixAdd/matrix_add_gpu.cu
+         .. literalinclude:: ../examples/2.03_VectorAdd/MatrixAdd/matrix_add_gpu.cu
             :language: CUDA
     
       .. tab:: Solution
 
-         .. literalinclude:: ../examples/CUDA/MatrixAdd/matrix_add_gpu_ref.cu
+         .. literalinclude:: ../examples/2.03_VectorAdd/MatrixAdd/Solution/matrix_add_gpu_ref.cu
             :language: CUDA
 
    0. Compile and execute the CPU code to have reference values.

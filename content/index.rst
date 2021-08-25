@@ -20,7 +20,7 @@ Intro
    2.02_HelloCUDA
    2.03_VectorAdd
    2.04_HeatEquation
-   3.01_ParallelReduction1
+   3.01_ParallelReduction
    3.02_TaskParallelism
 
 

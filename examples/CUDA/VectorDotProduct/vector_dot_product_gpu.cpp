@@ -1,1 +1,0 @@
-vector_dot_product_gpu.cu

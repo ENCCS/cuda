@@ -1,1 +1,0 @@
-matrix_add_gpu_ref.cu
