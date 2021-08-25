@@ -119,3 +119,4 @@ rst_epilog = f"""
 def setup(app):
     for obj in DIRECTIVES:
         app.add_directive(obj.cssname(), obj)
+    app.add_css_file("overrides.css")
