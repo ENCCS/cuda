@@ -106,17 +106,3 @@ html_context = {
 
 # Our own customisation
 from custom import DIRECTIVES, cuda_glossary
-
-# the epilog
-rst_epilog = f"""
-.. role:: red
-.. role:: blue
-.. _CMake: https://cmake.org/cmake/help/v3.19/
-
-{cuda_glossary()}
-"""
-
-def setup(app):
-    for obj in DIRECTIVES:
-        app.add_directive(obj.cssname(), obj)
-    app.add_css_file("overrides.css")
