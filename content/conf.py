@@ -114,3 +114,8 @@ rst_epilog = f"""
 
 {cuda_glossary()}
 """
+
+def setup(app):
+    for obj in DIRECTIVES:
+        app.add_directive(obj.cssname(), obj)
+    app.add_css_file("overrides.css")
