@@ -1,0 +1,26 @@
+.. _launch_kernel:
+
+Launching the GPU kernel
+========================
+
+Hello, CUDA!
+-------------
+
+.. typealong:: Printing messages from the CUDA kernel 
+
+   .. tabs::
+
+      .. tab:: C++
+
+         .. literalinclude:: ../examples/2.02_HelloGPU/hello_cpu.cpp
+            :language: c++
+
+      .. tab:: Solution
+
+         .. literalinclude:: ../examples/2.02_HelloGPU/Solution/hello_gpu_ref.cu
+            :language: CUDA
+      
+      .. tab:: Solution with two-dimensional grid
+
+         .. literalinclude:: ../examples/2.02_HelloGPU/Solution/hello_gpu_2D_ref.cu
+            :language: CUDA

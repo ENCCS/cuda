@@ -17,7 +17,7 @@ Intro
 
    1.01_GPUIntroduction
    2.01_DeviceQuery
-   2.02_HelloCUDA
+   2.02_HelloGPU
    2.03_VectorAdd
    2.04_HeatEquation
    3.01_ParallelReduction
