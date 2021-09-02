@@ -26,7 +26,7 @@ With the area limited, one can approximate the function :math:`U(x,y,t)` with th
 The grid is usually defined as a set of equally separated points, such as :math:`t_n=n\cdot dt`, :math:`x_i=x_0+i\cdot dx` and :math:`y_i=y_0+j\cdot dy`.
 The values of spatial steps :math:`dx` and :math:`dy` are such that the final grid points are :math:`x_1` and :math:`y_1` for two spatial dimensions respectively.
 
-.. figure:: img/NumericalScheme.png
+.. figure:: Figures/NumericalScheme.png
     :align: center
 
     The grid (A) and the template (B) of the numerical scheme for the heat equation.
@@ -84,7 +84,7 @@ For that, we will use a helper function that computes the one-dimensional index 
 
 Here, ``width`` is a width of a two-dimensional array, ``i`` and ``j`` are the two-dimensional indices.
 
-.. figure:: img/2Dto1DArrayMapping.png
+.. figure:: Figures/2Dto1DArrayMapping.png
     :align: center
     :scale: 50 %
 
@@ -287,7 +287,7 @@ In the following example, we will change the GPU kernel to use the shared memory
 
     3. Fill in all the central elements of the array by using all the threads in the block.
 
-    .. figure:: img/s_Un.png
+    .. figure:: Figures/s_Un.png
         :align: center
 
         The shared memory array s_Un, and how it maps to the global thread grid.

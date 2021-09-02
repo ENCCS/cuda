@@ -13,7 +13,7 @@ The task is to compute the sum of all the elements in the vector.
 The basic approach in a serial code is to designate a single floating point variable and add elements to it one by one in a loop.
 Thus, on each iteration, one floating point number will be added to accumulating value, as indicated on the figure below.
 
-.. figure:: img/Reduction/ENCCS-OpenACC-CUDA_Reduction_cpu_1.png
+.. figure:: Figures/Reduction/ENCCS-OpenACC-CUDA_Reduction_cpu_1.png
     :align: center
     :scale: 40 %
 
@@ -45,7 +45,7 @@ The figure below illustrates how the CPU algorithm can be adopted to run on a GP
 Since the number of threads on a GPU is a multiple by a block size, some threads may try to access the elements that are out of bonds.
 So either extra condition should be added ot the array should be extended by zeroes, as shown on the figure.
 
-.. figure:: img/Reduction/ENCCS-OpenACC-CUDA_Reduction_gpu_1.png
+.. figure:: Figures/Reduction/ENCCS-OpenACC-CUDA_Reduction_gpu_1.png
     :align: center
     :scale: 40 %
 
@@ -143,7 +143,7 @@ The idea is to make sure that only numbers of similar value are added together.
 This can be done by summing the elements by pairs.
 These binary sum should be of similar value as well, so the procedure can be repeated until the final value is obtained.
 
-.. figure:: img/Reduction/ENCCS-OpenACC-CUDA_Reduction_cpu_2.png
+.. figure:: Figures/Reduction/ENCCS-OpenACC-CUDA_Reduction_cpu_2.png
     :align: center
     :scale: 40 %
 
@@ -185,7 +185,7 @@ Let us fix the CPU code with the approach described by the figure above.
 
 Having this CPU version gives us a reference that can be handy while adapting the GPU code.
 
-.. figure:: img/Reduction/ENCCS-OpenACC-CUDA_Reduction_gpu_2.png
+.. figure:: Figures/Reduction/ENCCS-OpenACC-CUDA_Reduction_gpu_2.png
     :align: center
 
     Maping pair-style addition algorithm to CUDA.
@@ -326,7 +326,7 @@ The following figure shows how the modified code will work.
 We read the data to from global memory to the shared memory, reduce the data to a single value, which is then saved to the global memory before the kernel quits.
 Note that we will need to synchronize threads in multiple places to make sure that they all reached an intermediate checkpoint.
 
-.. figure:: img/Reduction/ENCCS-OpenACC-CUDA_Reduction_gpu_3.png
+.. figure:: Figures/Reduction/ENCCS-OpenACC-CUDA_Reduction_gpu_3.png
     :align: center
 
     A reduction algorithm that uses the shared memory.
@@ -398,7 +398,7 @@ This is not effective on a GPU: neighboring threads will diverge from one onothe
 Next optimization step will be fixing that.
 Let us try to modify the code so that the first threads in the block do the reduction.
 
-.. figure:: img/Reduction/ENCCS-OpenACC-CUDA_Reduction_gpu_4.png
+.. figure:: Figures/Reduction/ENCCS-OpenACC-CUDA_Reduction_gpu_4.png
     :align: center
 
     This figure may look similar to the one before.
@@ -438,7 +438,7 @@ Since two values are added at a time, they will be separated by the offset that 
 This means that the shared memory array should be split into two parts at each iterations: one for the first values for all the threads, the other is for the second.
 The offset, or separation value, will be reduced from one iteration to the other with less values to reduce.
 
-.. figure:: img/Reduction/ENCCS-OpenACC-CUDA_Reduction_gpu_5.png
+.. figure:: Figures/Reduction/ENCCS-OpenACC-CUDA_Reduction_gpu_5.png
     :align: center
 
     A scheme for the algorithm, where the memory is accessed sequentially.
@@ -473,7 +473,7 @@ The only thing that the second half of the threads are doing is loading the data
 This can be easily fixed by loading two numbers in each thread and reducing them before saving to the shared memory.
 In this case all threads will have some computations to do and less resources will be wasted.
 
-.. figure:: img/Reduction/ENCCS-OpenACC-CUDA_Reduction_gpu_6.png
+.. figure:: Figures/Reduction/ENCCS-OpenACC-CUDA_Reduction_gpu_6.png
     :align: center
 
     Only part of the algorithm that needs changing is shown.
@@ -518,7 +518,7 @@ It may look like we are asking the GPU to do extra work, but, in fact, we are re
 Indeed, the inactive threads wold have taken diferent path where they do nothing.
 But since there are the threads that actually do the work, the inactive threads will idle while this is happening since they are in the same warp.
 
-.. figure:: img/Reduction/ENCCS-OpenACC-CUDA_Reduction_gpu_7.png
+.. figure:: Figures/Reduction/ENCCS-OpenACC-CUDA_Reduction_gpu_7.png
     :align: center
     :scale: 40 %
 

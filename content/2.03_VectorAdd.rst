@@ -177,7 +177,7 @@ To get the global thread index, one can start the kernel function with:
 Here, ``threadIdx.x``, ``blockIdx.x`` and ``blockDim.x`` are internal variables that are always available inside the device function.
 They are, respectively, index of thread in a block, index of the block and the size of the block.
 
-.. figure:: img/BlocksAndThreads.png
+.. figure:: Figures/CUDA/BlocksAndThreads2.png
     :align: center
     :scale: 50 %
 

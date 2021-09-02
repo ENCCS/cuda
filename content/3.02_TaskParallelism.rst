@@ -17,7 +17,7 @@ For example, this can be explored in the reduction example --- different part of
 All that we will have to do after is to sum the results up.
 Note that there is another avenue that can be explored in a GPU version as we will see later.
 
-.. figure:: img/TaskParallelism/ENCCS-OpenACC-CUDA_TaskParallelism_Explanation.png
+.. figure:: Figures/TaskParallelism/ENCCS-OpenACC-CUDA_TaskParallelism_Explanation.png
     :align: center
     :scale: 40 %
 
@@ -27,7 +27,7 @@ Note that there is another avenue that can be explored in a GPU version as we wi
 
 A typical program running on a single CPU core will be executed sequentially, as shown on the figure below.
 
-.. figure:: img/TaskParallelism/ENCCS-OpenACC-CUDA_TaskParallelism_SchemeCPUSequential.png
+.. figure:: Figures/TaskParallelism/ENCCS-OpenACC-CUDA_TaskParallelism_SchemeCPUSequential.png
     :align: center
     :scale: 30 %
 
@@ -37,7 +37,7 @@ A typical program running on a single CPU core will be executed sequentially, as
 With more than on CPU code, one can start exploring the task-based parallelism, running the two independent task simultaneously (e.g. one task per core or MPI rank).
 This is out of scope of this workshop, but we encourage listeners to participate in our `MPI training <https://enccs.github.io/intermediate-mpi/>`_.).
 
-.. figure:: img/TaskParallelism/ENCCS-OpenACC-CUDA_TaskParallelism_SchemeCPUParallel.png
+.. figure:: Figures/TaskParallelism/ENCCS-OpenACC-CUDA_TaskParallelism_SchemeCPUParallel.png
     :align: center
     :scale: 30 %
 
@@ -91,7 +91,7 @@ Let us start with exploring the data parallelism first.
 Although the evaluation of these fairly compute heavy kernels is noticeable quicker on a GPU, we still have the room for improvement.
 The current version of the program requests GPU to do the following workflow:
 
-.. figure:: img/TaskParallelism/ENCCS-OpenACC-CUDA_TaskParallelism_SchemeGPUSequential.png
+.. figure:: Figures/TaskParallelism/ENCCS-OpenACC-CUDA_TaskParallelism_SchemeGPUSequential.png
     :align: center
     :scale: 30 %
 
@@ -100,7 +100,7 @@ The current version of the program requests GPU to do the following workflow:
 
 As a result, the execution timeline looks similar to this:
 
-.. figure:: img/TaskParallelism/ENCCS-OpenACC-CUDA_TaskParallelism2_TimelineGPUSync.png
+.. figure:: Figures/TaskParallelism/ENCCS-OpenACC-CUDA_TaskParallelism2_TimelineGPUSync.png
     :align: center
     :scale: 30 %
 
@@ -116,7 +116,7 @@ Consider now having two GPU tasks that need their own data.
 Both of these task will copy the input host to the device, execute the computational kernel and copy data back.
 So we want the execution to follow the scheme below.
 
-.. figure:: img/TaskParallelism/ENCCS-OpenACC-CUDA_TaskParallelism_SchemeGPUParallel.png
+.. figure:: Figures/TaskParallelism/ENCCS-OpenACC-CUDA_TaskParallelism_SchemeGPUParallel.png
     :align: center
     :scale: 30 %
 
@@ -228,7 +228,7 @@ Now we have all the means to execute the data transfers and kernel calls asynchr
 On a GPU, the host to device copy, kernel evaluation and device to host copy require different resources.
 Hence, while the data is copied, GPU can execute the computational kernel without interfering with the compute.
 
-.. figure:: img/TaskParallelism/ENCCS-OpenACC-CUDA_TaskParallelism2_TimelineGPUAsync.png
+.. figure:: Figures/TaskParallelism/ENCCS-OpenACC-CUDA_TaskParallelism2_TimelineGPUAsync.png
     :align: center
     :scale: 35 %
 
@@ -239,7 +239,7 @@ Hence, while the data is copied, GPU can execute the computational kernel withou
 3. Introducing dependencies between kernels
 -------------------------------------------
 
-.. figure:: img/TaskParallelism/ENCCS-OpenACC-CUDA_TaskParallelism2_SchemeGPUDependency.png
+.. figure:: Figures/TaskParallelism/ENCCS-OpenACC-CUDA_TaskParallelism2_SchemeGPUDependency.png
     :align: center
     :scale: 35 %
 
@@ -307,7 +307,7 @@ As one can see, the resulting sum of the elements is now different.
 This happens because the evaluation of the ``func1(..)`` was not finished before the ``func2(..)`` call.
 So some values of the ``result`` were not updated for the ``func2(..)``.
 
-.. figure:: img/TaskParallelism/ENCCS-OpenACC-CUDA_TaskParallelism2_TimelineGPUAsync.png
+.. figure:: Figures/TaskParallelism/ENCCS-OpenACC-CUDA_TaskParallelism2_TimelineGPUAsync.png
     :align: center
     :scale: 35 %
 
@@ -316,7 +316,7 @@ So some values of the ``result`` were not updated for the ``func2(..)``.
 5. Introducing dependencies between GPU tasks
 ---------------------------------------------
 
-.. figure:: img/TaskParallelism/ENCCS-OpenACC-CUDA_TaskParallelism2_TimelineAsyncDependency.png
+.. figure:: Figures/TaskParallelism/ENCCS-OpenACC-CUDA_TaskParallelism2_TimelineAsyncDependency.png
     :align: center
     :scale: 35 %
 
