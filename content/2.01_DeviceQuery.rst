@@ -50,6 +50,8 @@ The following code should get you an information on the first device in the syst
    cudaGetDeviceProp prop;
    cudaGetDeviceProperties(&prop, 0);
 
+Exercise
+--------
 
 .. typealong:: Getting the information on available devices using CUDA API 
 

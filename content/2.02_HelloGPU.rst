@@ -3,8 +3,8 @@
 Launching the GPU kernel
 ========================
 
-Hello, CUDA!
--------------
+CUDA kernels
+------------
 
 Now we learned how to interact with CUDA API, we can ask the GPU to execute a code.
 GPU is an accelerator, which means that it was designed to be used alongside the conventional CPU.
@@ -90,6 +90,9 @@ It should be larger that the number of CUDA cores in the SM to fully occupy the 
 Values of 256 or 512 are frequently used.
 The total number of threads that will be created is the multiple of ``numBlocks`` and ``threadsPerBlock``.
 
+Kernels are asynchronous
+------------------------
+
 In CUDA, the execution of the kernel is asynchronous.
 This means that the execution will return to the CPU immediately after the kernel is launched.
 Later we will see how this can be used to our advantage, since it allows us to keep CPU busy while GPU is executing the kernel.
@@ -106,6 +109,9 @@ We are already familiar with |__host__| and |__device__| specifiers: this functi
 As usual, the return type is |cudaError_t|, which may indicate that there was an error in execution and the function does not take any arguments.
 
 This is all we are going to need for our next example, in which we are going to ask a thread to print its global index.
+
+Exercise
+--------
 
 .. typealong:: Printing messages from the CUDA kernel 
 
