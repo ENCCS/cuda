@@ -49,7 +49,7 @@ Tentative schedule
    :header-rows: 1
 
    * - Day 1
-     -
+     - Thursday, October 7, 2021
    * - 9:00 -  9:10
      - Welcome and introduction to the training course
    * - 9:10 -  9:30
@@ -76,7 +76,7 @@ Tentative schedule
    :header-rows: 1
 
    * - Day 2
-     -
+     - Friday, October 8, 2021
    * - 9:00 -  9:10
      - Follow-ups from day 1
    * - 9:10 -  10:10
