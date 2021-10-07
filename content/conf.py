@@ -20,7 +20,7 @@ sys.path.insert(0, os.path.abspath('.'))
 project = "CUDA training materials"
 copyright = "2021, Artem Zhmurov and individual contributors."
 author = "Artem Zhmurov and individual contributors."
-github_user = "zhmurov"
+github_user = "ENCCS"
 github_repo_name = "CUDA"
 github_version = "main"
 conf_py_path = "/content/"  # with leading and trailing slash
