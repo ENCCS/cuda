@@ -40,7 +40,7 @@ With the grid defined, one can use the following explicit approximation for the 
 
 .. math::
 
-    \frac{U^{n+1}_{i,j}-U^{n}_{i,j}}{t_n}=a\left(\frac{U^n_{i-1,j}-2U^{n}_{i,j}+U^n_{i+1,j}}{dx} + \frac{U^n_{i,j-1}-2U^{n}_{i,j}+U^n_{i,j+1}}{dx}\right)
+    \frac{U^{n+1}_{i,j}-U^{n}_{i,j}}{dt}=a\left(\frac{U^n_{i-1,j}-2U^{n}_{i,j}+U^n_{i+1,j}}{dx} + \frac{U^n_{i,j-1}-2U^{n}_{i,j}+U^n_{i,j+1}}{dx}\right)
 
 Here we used basic approximations for the first and second derivatives :math:`\frac{df}{dx}\approx\frac{f(x+dx)-f(x)}{dx}` and :math:`\frac{d^2f}{dx^2}\approx\frac{f(x-dx)-2f(x)+f(x+dx)}{dx^2}`.
 In the equation above, the values on the next time step, :math:`U^{n+1}_{i,j}` are unknown.
