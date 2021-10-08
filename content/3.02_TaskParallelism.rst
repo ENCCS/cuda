@@ -3,7 +3,7 @@
 Asynchronous execution
 ======================
 
-1. Task parallelizm
+1. Task parallelism
 -------------------
 
 So far when using GPUs we have explored the data parallelism.
@@ -51,7 +51,7 @@ In this example we will use the folded trigonometric functions.
 Now we have both data and task parallelism in the same example: we do the same operation on multiple vector elements and we have two vectors to execute it on.
 Let us start with exploring the data parallelism first.
 
-.. typealong:: Task parallelizm
+.. typealong:: Task parallelism
 
     .. tabs::
 
