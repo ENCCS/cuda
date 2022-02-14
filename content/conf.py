@@ -17,7 +17,7 @@ sys.path.insert(0, os.path.abspath('.'))
 
 # -- Project information -----------------------------------------------------
 
-project = "CUDA training materials"
+project = "Heterogeneous programming with CUDA/HIP"
 copyright = "2021, Artem Zhmurov and individual contributors."
 author = "Artem Zhmurov and individual contributors."
 github_user = "ENCCS"

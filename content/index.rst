@@ -1,5 +1,5 @@
-CUDA training
-=============
+Heterogeneous programming with CUDA/HIP
+=======================================
 
 
 Intro
