@@ -22,6 +22,7 @@ Intro
    2.04_HeatEquation
    3.01_ParallelReduction
    3.02_TaskParallelism
+   4.01_FromCUDAToHIP
 
 
 .. toctree::
