@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CUDA training &mdash; CUDA training materials  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/togglebutton.css" type="text/css" />
+      <link rel="stylesheet" href="_static/mystnb.css" type="text/css" />
+      <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="_static/sphinx_lesson.css" type="text/css" />
+      <link rel="stylesheet" href="_static/sphinx_rtd_theme_ext_color_contrast.css" type="text/css" />
+      <link rel="stylesheet" href="_static/overrides.css" type="text/css" />
+      <link rel="stylesheet" href="_static/tabs.css" type="text/css" />
+      <link rel="stylesheet" href="_static/overrides.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/togglebutton.js"></script>
+        <script src="_static/clipboard.min.js"></script>
+        <script src="_static/copybutton.js"></script>
+        <script src="_static/minipres.js"></script>
+        <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex/" />
+    <link rel="search" title="Search" href="search/" />
+    <link rel="next" title="Introduction to GPU" href="1.01_GPUIntroduction/" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="#" class="icon icon-home"> CUDA training materials
+            <img src="_static/ENCCS.jpg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search/" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Table of contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="1.01_GPUIntroduction/">Introduction to GPU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2.01_DeviceQuery/">Using CUDA API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2.02_HelloGPU/">Launching the GPU kernel</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2.03_VectorAdd/">Allocate memory and transfer data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2.04_HeatEquation/">Solving heat equation with CUDA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3.01_ParallelReduction/">Optimizing the GPU kernel</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3.02_TaskParallelism/">Asynchronous execution</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="quick-reference/">Quick Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guide/">Instructor’s guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">CUDA training materials</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home"></a> &raquo;</li>
+      <li>CUDA training</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/zhmurov/CUDA/blob/main/content/index.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="cuda-training">
+<h1>CUDA training<a class="headerlink" href="#cuda-training" title="Permalink to this headline"></a></h1>
+<p>Intro</p>
+<div class="admonition-prerequisites prerequisites admonition">
+<p class="admonition-title">Prerequisites</p>
+<p>prerequisites</p>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Table of contents</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="1.01_GPUIntroduction/">Introduction to GPU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2.01_DeviceQuery/">Using CUDA API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2.02_HelloGPU/">Launching the GPU kernel</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2.03_VectorAdd/">Allocate memory and transfer data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="2.04_HeatEquation/">Solving heat equation with CUDA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3.01_ParallelReduction/">Optimizing the GPU kernel</a></li>
+<li class="toctree-l1"><a class="reference internal" href="3.02_TaskParallelism/">Asynchronous execution</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="quick-reference/">Quick Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guide/">Instructor’s guide</a></li>
+</ul>
+</div>
+<div class="section" id="who-is-the-course-for">
+<span id="learner-personas"></span><h2>Who is the course for?<a class="headerlink" href="#who-is-the-course-for" title="Permalink to this headline"></a></h2>
+<p>This course is for students, researchers, engineers and programmers who would like to learn GPU programming with CUDA.
+Some previous experience with C/C++ is required, no prior knowledge of CUDA is needed.</p>
+</div>
+<div class="section" id="tentative-schedule">
+<h2>Tentative schedule<a class="headerlink" href="#tentative-schedule" title="Permalink to this headline"></a></h2>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 26%" />
+<col style="width: 74%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Day 1</p></th>
+<th class="head"><p>Thursday, October 7, 2021</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>9:00 -  9:10</p></td>
+<td><p>Welcome and introduction to the training course</p></td>
+</tr>
+<tr class="row-odd"><td><p>9:10 -  9:30</p></td>
+<td><p>Introduction to GPUs</p></td>
+</tr>
+<tr class="row-even"><td><p>9:30 -  10:10</p></td>
+<td><p>Using CUDA</p></td>
+</tr>
+<tr class="row-odd"><td><p>10:10 - 10:20</p></td>
+<td><p>Break</p></td>
+</tr>
+<tr class="row-even"><td><p>10:20 - 10:50</p></td>
+<td><p>Adding two vectors on the GPU</p></td>
+</tr>
+<tr class="row-odd"><td><p>10:50 - 11:10</p></td>
+<td><p>Break-out rooms</p></td>
+</tr>
+<tr class="row-even"><td><p>11:10 - 11:20</p></td>
+<td><p>Break</p></td>
+</tr>
+<tr class="row-odd"><td><p>11:20 - 12:30</p></td>
+<td><p>Solving heat equation with CUDA</p></td>
+</tr>
+<tr class="row-even"><td><p>12:30 - 12:50</p></td>
+<td><p>Break-out rooms</p></td>
+</tr>
+<tr class="row-odd"><td><p>12:50 - 13:00</p></td>
+<td><p>Wrap-up</p></td>
+</tr>
+</tbody>
+</table>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 26%" />
+<col style="width: 74%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Day 2</p></th>
+<th class="head"><p>Friday, October 8, 2021</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>9:00 -  9:10</p></td>
+<td><p>Follow-ups from day 1</p></td>
+</tr>
+<tr class="row-odd"><td><p>9:10 -  10:10</p></td>
+<td><p>Optimizing the CUDA kernel</p></td>
+</tr>
+<tr class="row-even"><td><p>10:10 - 10:30</p></td>
+<td><p>Break-out rooms</p></td>
+</tr>
+<tr class="row-odd"><td><p>10:30 - 10:50</p></td>
+<td><p>Optimizing the CUDA kernel (cont.)</p></td>
+</tr>
+<tr class="row-even"><td><p>10:50 - 11:00</p></td>
+<td><p>Break</p></td>
+</tr>
+<tr class="row-odd"><td><p>11:00 - 11:50</p></td>
+<td><p>Exploring task-based parallelism</p></td>
+</tr>
+<tr class="row-even"><td><p>11:50 - 12:10</p></td>
+<td><p>Break-out rooms</p></td>
+</tr>
+<tr class="row-odd"><td><p>12:10 - 12:50</p></td>
+<td><p>Exploring task-based parallelism (cont.)</p></td>
+</tr>
+<tr class="row-even"><td><p>12:50 - 13:00</p></td>
+<td><p>Wrap-up</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="about-the-course">
+<h2>About the course<a class="headerlink" href="#about-the-course" title="Permalink to this headline"></a></h2>
+<p>These course materials are developed for those who wants to leark GPU programming with CUDA from the beginning.
+The course consists of lectures, type-along and hands-on sessions.</p>
+<p>During the first day, we will cover the architecture of the GPU accelerators, basic usage of CUDA, and how to control data movement between CPUs and GPUs.
+The second day focuses on more advanced topics, such as how to optimize computational kernels for efficient execution on GPU hardware and how to explore the task-based parallelism using streams and events.
+We will also briefly go through profiling tools that can help one to identify the computational bottleneck of the applications.</p>
+<p>After the course the participants should have the basic skills needed for using CUDA in new or existing applications.</p>
+<p>The participants are assumed to have knowledge of C programming language.
+Since participants will be using HPC clusters to run the examples, fluent operation in a Linux/Unix environment is assumed.</p>
+</div>
+<div class="section" id="see-also">
+<h2>See also<a class="headerlink" href="#see-also" title="Permalink to this headline"></a></h2>
+</div>
+<div class="section" id="credits">
+<h2>Credits<a class="headerlink" href="#credits" title="Permalink to this headline"></a></h2>
+<p>The lesson file structure and browsing layout is inspired by and derived from
+<a class="reference external" href="https://github.com/coderefinery/sphinx-lesson">work</a> by <a class="reference external" href="https://coderefinery.org/">CodeRefinery</a> licensed under the <a class="reference external" href="http://opensource.org/licenses/mit-license.html">MIT license</a>. We have copied and adapted
+most of their license text.</p>
+<div class="section" id="instructional-material">
+<h3>Instructional Material<a class="headerlink" href="#instructional-material" title="Permalink to this headline"></a></h3>
+<p>This instructional material is made available under the
+<a class="reference external" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution license (CC-BY-4.0)</a>.
+The following is a human-readable summary of (and not a substitute for) the
+<a class="reference external" href="https://creativecommons.org/licenses/by/4.0/legalcode">full legal text of the CC-BY-4.0 license</a>.
+You are free to:</p>
+<ul class="simple">
+<li><p><strong>share</strong> - copy and redistribute the material in any medium or format</p></li>
+<li><p><strong>adapt</strong> - remix, transform, and build upon the material for any purpose,
+even commercially.</p></li>
+</ul>
+<p>The licensor cannot revoke these freedoms as long as you follow these license terms:</p>
+<ul class="simple">
+<li><p><strong>Attribution</strong> - You must give appropriate credit (mentioning that your work
+is derived from work that is Copyright (c) Artem Zhmurov and individual contributors and, where practical, linking
+to <a class="reference external" href="https://enccs.github.io/CUDA">https://enccs.github.io/CUDA</a>), provide a <a class="reference external" href="https://creativecommons.org/licenses/by/4.0/">link to the license</a>, and indicate if changes were
+made. You may do so in any reasonable manner, but not in any way that suggests
+the licensor endorses you or your use.</p></li>
+<li><p><strong>No additional restrictions</strong> - You may not apply legal terms or
+technological measures that legally restrict others from doing anything the
+license permits.</p></li>
+</ul>
+<p>With the understanding that:</p>
+<ul class="simple">
+<li><p>You do not have to comply with the license for elements of the material in
+the public domain or where your use is permitted by an applicable exception
+or limitation.</p></li>
+<li><p>No warranties are given. The license may not give you all of the permissions
+necessary for your intended use. For example, other rights such as
+publicity, privacy, or moral rights may limit how you use the material.</p></li>
+</ul>
+</div>
+<div class="section" id="software">
+<h3>Software<a class="headerlink" href="#software" title="Permalink to this headline"></a></h3>
+<p>Except where otherwise noted, the example programs and other software provided
+with this repository are made available under the <a class="reference external" href="http://opensource.org/">OSI</a>-approved
+<a class="reference external" href="https://opensource.org/licenses/mit-license.html">MIT license</a>.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="1.01_GPUIntroduction/" class="btn btn-neutral float-right" title="Introduction to GPU" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Artem Zhmurov and individual contributors..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

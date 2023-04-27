@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Launching the GPU kernel &mdash; CUDA training materials  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/togglebutton.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/mystnb.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sphinx_lesson.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sphinx_rtd_theme_ext_color_contrast.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/overrides.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/tabs.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/overrides.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/togglebutton.js"></script>
+        <script src="../_static/clipboard.min.js"></script>
+        <script src="../_static/copybutton.js"></script>
+        <script src="../_static/minipres.js"></script>
+        <script src="../_static/tabs.js"></script>
+        <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex/" />
+    <link rel="search" title="Search" href="../search/" />
+    <link rel="next" title="Allocate memory and transfer data" href="../2.03_VectorAdd/" />
+    <link rel="prev" title="Using CUDA API" href="../2.01_DeviceQuery/" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../" class="icon icon-home"> CUDA training materials
+            <img src="../_static/ENCCS.jpg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search/" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Table of contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../1.01_GPUIntroduction/">Introduction to GPU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../2.01_DeviceQuery/">Using CUDA API</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Launching the GPU kernel</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#cuda-kernels">CUDA kernels</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#kernels-are-asynchronous">Kernels are asynchronous</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#exercise">Exercise</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../2.03_VectorAdd/">Allocate memory and transfer data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../2.04_HeatEquation/">Solving heat equation with CUDA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../3.01_ParallelReduction/">Optimizing the GPU kernel</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../3.02_TaskParallelism/">Asynchronous execution</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../quick-reference/">Quick Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/">Instructor’s guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../">CUDA training materials</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../" class="icon icon-home"></a> &raquo;</li>
+      <li>Launching the GPU kernel</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/zhmurov/CUDA/blob/main/content/2.02_HelloGPU.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="launching-the-gpu-kernel">
+<span id="launch-kernel"></span><h1>Launching the GPU kernel<a class="headerlink" href="#launching-the-gpu-kernel" title="Permalink to this headline"></a></h1>
+<div class="section" id="cuda-kernels">
+<h2>CUDA kernels<a class="headerlink" href="#cuda-kernels" title="Permalink to this headline"></a></h2>
+<p>Now we learned how to interact with CUDA API, we can ask the GPU to execute a code.
+GPU is an accelerator, which means that it was designed to be used alongside the conventional CPU.
+Any code that uses GPU must have two parts: one that is executed on a CPU and one that is ported to the GPU.
+CPU still controls the workflow, with GPU helping out with the more compute-intensive parts of the workflow.
+This is why the CPU is normally referred to as a host, and GPU — as a device.
+With this hardware structure, the API should have a means to switch from CPU to GPU execution.
+This is done using special functions, called kernels.
+To separate these functions from usual functions, they are marked by function specifier <a class="reference internal" href="https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#global"><span class="xref std std-term"><code class="docutils literal notranslate">__global__</code></span></a>:</p>
+<div class="highlight-cuda notranslate"><div class="highlight"><pre><span></span><span class="kr">__global__</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">gpu_kernel</span><span class="p">(..)</span><span class="w"></span>
+</pre></div>
+</div>
+<p>What <a class="reference internal" href="https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#global"><span class="xref std std-term"><code class="docutils literal notranslate">__global__</code></span></a> essentially means is that the function should be called from the host code, but will be executed on the device.
+Since this function will be executed in many threads, the return value must be <code class="docutils literal notranslate"><span class="pre">void</span></code>: otherwise it would not be clear which of the threads should do the return.
+The rest of the function definition is the same as with any C/C++ function: its name has the same limitations as a normal C function, it can have any number of arguments of any type, it is even can be templated.
+Since the call of the kernel function happens in the host code but it is executed on the device, this place in the code marks a transition from single-thread execution to a many-thread execution.
+One can think of it being a loop, each step of which is executed simultaneously.
+As in loop, one needs an index, to differentiate the threads.
+Here it gets a little bit complicated and we need to step back and re-iterate on how the GPUs are organized on a hardware level.</p>
+<div class="figure align-center" id="id1">
+<img alt="../_images/MappingBlocksToSMs.png" src="../_images/MappingBlocksToSMs.png" />
+<p class="caption"><span class="caption-text">A simple example of the division of threads (green squares) in blocks (cyan rectangles).
+The equally-sized blocks contain four threads each.
+The thread index starts from zero in each block.
+Hence the “global” thread index should be computed from the thread index, block index and block size.
+This is explained for the thread #3 in block #2 (blue numbers).
+The thread blocks are mapped to SMs for execution, with all threads within a block executing on the same device.
+The number of threads within one block does not have to be equal to the number of execution units within multiprocessor.
+In fact, GPUs can switch between software threads very efficiently, putting threads that currently wait for the data on hold and releasing the resources for threads that are ready for computations.
+For efficient GPU utilization, the number of threads per block has to be couple of factors higher than the number of computing units on the multiprocessor.
+Same is true for the number of thread blocks, which can and should be higher than the number of available multiprocessor in order to use the GPU computational resources efficiently.</span><a class="headerlink" href="#id1" title="Permalink to this image"></a></p>
+</div>
+<p>The GPU contains several Streaming Modules (SMs, or multiprocessors), each with many compute units (see Figure above).
+Every compute unit can execute commands.
+So the entire GPU is first divided into streaming modules (or multiprocessors) and each multiprocessor contains many execution units.
+To reflect this hierarchy on a software level, threads are grouped in identically sized blocks.
+Each block is assigned into a streaming module for execution.
+This collection of the thread blocks is usually called “grid”, which also can be multi-dimensional.</p>
+<p>Although it may seem a bit complicated at the beginning, the grouping of threads open extra opportunities for synchronization and data exchange.
+Since threads in a block are executed on a same SM, they can shared the data and can do fast communications.
+This can be leveraged when designing and optimizing the code for GPU execution, and we will touch this topic later.</p>
+<p>Given that the threads on a GPU are organized in a hierarchical manner, the global index of a thread should be computed from its in-block index, the index of execution block and the execution block size.
+To get the global thread index, one can start the kernel function with:</p>
+<div class="highlight-CUDA notranslate"><div class="highlight"><pre><span></span><span class="kr">__global__</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">gpu_kernel</span><span class="p">(..)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">   </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">threadIdx</span><span class="p">.</span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">blockIdx</span><span class="p">.</span><span class="n">x</span><span class="o">*</span><span class="nb">blockDim</span><span class="p">.</span><span class="n">x</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Here, <code class="docutils literal notranslate"><span class="pre">threadIdx.x</span></code>, <code class="docutils literal notranslate"><span class="pre">blockIdx.x</span></code> and <code class="docutils literal notranslate"><span class="pre">blockDim.x</span></code> are internal variables that are always available inside the device function.
+They are, respectively, index of thread in a block, index of the block and the size of the block.</p>
+<p>Here, we use one-dimensional arrangement of blocks and threads (hence, the <code class="docutils literal notranslate"><span class="pre">.x</span></code>).
+More on multi-dimensional grids and CUDA built-in simple types later, for now we assume that the rest of the components equal to 1.
+Since the index <code class="docutils literal notranslate"><span class="pre">i</span></code> is unique for each thread in an entire grid, it is usually called “global” index.
+Global index can than be used to identify the GPU thread and assign a data elements to it.
+For example, if we are applying the same function on different data elements in an array, we can use the global index to identify the element of this array for a particular thread.
+In a CPU code, this would normally be done in a loop over all consecutive values in an array.
+In a GPU code, we assign a thread to each element of the array.</p>
+<p>Now the kernel is defined, we can call it from the host code.
+Since the kernel will be executed in a grid of threads, so the kernel launch should be supplied with the configuration of the grid.
+In CUDA this is done by adding <a class="reference external" href="https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#programming-model">kernel cofiguration</a>, <code class="docutils literal notranslate"><span class="pre">&lt;&lt;&lt;numBlocks,</span> <span class="pre">threadsPerBlock&gt;&gt;&gt;</span></code>, to the function call:</p>
+<div class="highlight-cuda notranslate"><div class="highlight"><pre><span></span><span class="n">gpu_kernel</span><span class="o">&lt;&lt;&lt;</span><span class="n">numBlocks</span><span class="p">,</span><span class="w"> </span><span class="n">threadsPerBlock</span><span class="o">&gt;&gt;&gt;</span><span class="p">(..)</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Here, <code class="docutils literal notranslate"><span class="pre">numBlocks</span></code> is the total number of thread blocks in the grid, <code class="docutils literal notranslate"><span class="pre">threadsPerBlock</span></code> is the number of threads in a single block.
+Note, that these values can be integers, or can be two-dimensional of three-dimensional vectors, if this is more suitable for the kernel.
+More on that later.
+In case of one-dimensional grid, the kernel configuration can be specified by two integer values.
+The threadsPerBlock can be arbitrary chosen.
+It should be larger that the number of CUDA cores in the SM to fully occupy the device, but lower than the limit of 1024 (see <a class="reference external" href="https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#compute-capabilities">the technical specifications</a>).
+Values of 256 or 512 are frequently used.
+The total number of threads that will be created is the multiple of <code class="docutils literal notranslate"><span class="pre">numBlocks</span></code> and <code class="docutils literal notranslate"><span class="pre">threadsPerBlock</span></code>.</p>
+</div>
+<div class="section" id="kernels-are-asynchronous">
+<h2>Kernels are asynchronous<a class="headerlink" href="#kernels-are-asynchronous" title="Permalink to this headline"></a></h2>
+<p>In CUDA, the execution of the kernel is asynchronous.
+This means that the execution will return to the CPU immediately after the kernel is launched.
+Later we will see how this can be used to our advantage, since it allows us to keep CPU busy while GPU is executing the kernel.
+But for the following example we will need to explicitly ask the CPU to wait until the GPU is done with the kernel execution.
+This can be done with the following function from CUDA API:</p>
+<div class="admonition-cudadevicesynchronize signature toggle-shown dropdown admonition">
+<p class="admonition-title"><a class="reference internal" href="https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__DEVICE.html#group__CUDART__DEVICE_1g10e20b05a95f638a4071a655503df25d"><span class="xref std std-term"><code class="docutils literal notranslate">cudaDeviceSynchronize(..)</code></span></a></p>
+<div class="highlight-CUDA notranslate"><div class="highlight"><pre><span></span>__host__ ​__device__​ cudaError_t cudaDeviceSynchronize()
+</pre></div>
+</div>
+</div>
+<p>We are already familiar with <a class="reference internal" href="https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#host"><span class="xref std std-term"><code class="docutils literal notranslate">__host__</code></span></a> and <a class="reference internal" href="https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#device-function-specifier"><span class="xref std std-term"><code class="docutils literal notranslate">__device__</code></span></a> specifiers: this function can be used in both host and device code.
+As usual, the return type is <a class="reference internal" href="https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__TYPES.html#group__CUDART__TYPES_1g3f51e3575c2178246db0a94a430e0038"><span class="xref std std-term"><code class="docutils literal notranslate">cudaError_t</code></span></a>, which may indicate that there was an error in execution and the function does not take any arguments.</p>
+<p>This is all we are going to need for our next example, in which we are going to ask a thread to print its global index.</p>
+</div>
+<div class="section" id="exercise">
+<h2>Exercise<a class="headerlink" href="#exercise" title="Permalink to this headline"></a></h2>
+<div class="admonition-printing-messages-from-the-cuda-kernel typealong toggle-shown dropdown admonition">
+<p class="admonition-title">Printing messages from the CUDA kernel</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-0-0-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-0-0-0" name="0-0" role="tab" tabindex="0">C++</button><button aria-controls="panel-0-0-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-1" name="0-1" role="tab" tabindex="-1">Solution with one block</button><button aria-controls="panel-0-0-2" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-2" name="0-2" role="tab" tabindex="-1">Solution</button><button aria-controls="panel-0-0-3" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-3" name="0-3" role="tab" tabindex="-1">Solution with 2D grid</button></div><div aria-labelledby="tab-0-0-0" class="sphinx-tabs-panel" id="panel-0-0-0" name="0-0" role="tabpanel" tabindex="0"><div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;I am a CPU running one thread.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-0-0-1" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-1" name="0-1" role="tabpanel" tabindex="0"><div class="highlight-CUDA notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+
+<span class="kr">__global__</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">hello_kernel</span><span class="p">()</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Hello from GPU thread %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="nb">threadIdx</span><span class="p">.</span><span class="n">x</span><span class="p">);</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kt">int</span><span class="w"> </span><span class="n">main</span><span class="p">()</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">hello_kernel</span><span class="o">&lt;&lt;&lt;</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">32</span><span class="o">&gt;&gt;&gt;</span><span class="p">();</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">cudaDeviceSynchronize</span><span class="p">();</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-0-0-2" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-2" name="0-2" role="tabpanel" tabindex="0"><div class="highlight-CUDA notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+
+<span class="kr">__global__</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">hello_kernel</span><span class="p">()</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">threadInBlock</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">threadIdx</span><span class="p">.</span><span class="n">x</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">blockIndex</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">blockIdx</span><span class="p">.</span><span class="n">x</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">blockSize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">blockDim</span><span class="p">.</span><span class="n">x</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">threadIndex</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">blockIndex</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">blockSize</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">threadInBlock</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Hello from GPU thread %d = %d * %d + %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">threadIndex</span><span class="p">,</span><span class="w"> </span><span class="n">blockIndex</span><span class="p">,</span><span class="w"> </span><span class="n">blockSize</span><span class="p">,</span><span class="w"> </span><span class="n">threadInBlock</span><span class="p">);</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kt">int</span><span class="w"> </span><span class="n">main</span><span class="p">()</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">numThreadsInBlock</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">32</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">numBlocks</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">hello_kernel</span><span class="o">&lt;&lt;&lt;</span><span class="n">numBlocks</span><span class="p">,</span><span class="w"> </span><span class="n">numThreadsInBlock</span><span class="o">&gt;&gt;&gt;</span><span class="p">();</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">cudaDeviceSynchronize</span><span class="p">();</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-0-0-3" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-3" name="0-3" role="tabpanel" tabindex="0"><div class="highlight-CUDA notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+
+<span class="kr">__global__</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">hello_kernel</span><span class="p">()</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Hello from GPU thread (%d, %d) = (%d, %d) * (%d, %d) + (%d, %d)</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="nb">threadIdx</span><span class="p">.</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="nb">threadIdx</span><span class="p">.</span><span class="n">y</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="nb">blockIdx</span><span class="p">.</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="nb">blockIdx</span><span class="p">.</span><span class="n">y</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="nb">blockDim</span><span class="p">.</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="nb">blockDim</span><span class="p">.</span><span class="n">y</span><span class="p">,</span><span class="w"></span>
+<span class="w">        </span><span class="nb">blockIdx</span><span class="p">.</span><span class="n">x</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nb">blockDim</span><span class="p">.</span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">threadIdx</span><span class="p">.</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="nb">blockIdx</span><span class="p">.</span><span class="n">y</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nb">blockDim</span><span class="p">.</span><span class="n">y</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">threadIdx</span><span class="p">.</span><span class="n">y</span><span class="p">);</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kt">int</span><span class="w"> </span><span class="n">main</span><span class="p">()</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">dim3</span><span class="w"> </span><span class="nf">numThreadsInBlock</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="kt">dim3</span><span class="w"> </span><span class="nf">numBlocks</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">hello_kernel</span><span class="o">&lt;&lt;&lt;</span><span class="n">numBlocks</span><span class="p">,</span><span class="w"> </span><span class="n">numThreadsInBlock</span><span class="o">&gt;&gt;&gt;</span><span class="p">();</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">cudaDeviceSynchronize</span><span class="p">();</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</div></div>
+<ol class="arabic simple">
+<li><p>Change the file extension to <code class="docutils literal notranslate"><span class="pre">.cu</span></code> to inform the compiler that it will contain GPU code.</p></li>
+<li><p>Create a kernel function. Remember that kernel should be marked with <a class="reference internal" href="https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#global"><span class="xref std std-term"><code class="docutils literal notranslate">__global__</code></span></a> specifier and should return <code class="docutils literal notranslate"><span class="pre">void</span></code>.</p></li>
+<li><p>In the kernel function, get the thread index using <code class="docutils literal notranslate"><span class="pre">threadIdx.x</span></code> and print it out.</p></li>
+<li><p>Call the kernel in a single block of 32 threads.</p></li>
+<li><p>Add <a class="reference internal" href="https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__DEVICE.html#group__CUDART__DEVICE_1g10e20b05a95f638a4071a655503df25d"><span class="xref std std-term"><code class="docutils literal notranslate">cudaDeviceSynchronize(..)</code></span></a> call after the kernel call to ensure that the host will wait for the GPU to complete the task.</p></li>
+</ol>
+<div class="admonition-what-will-happen-if-we-don-t-add-the-cudadevicesynchronize-call exercise important admonition">
+<p class="admonition-title">What will happen if we don’t add the <a class="reference internal" href="https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__DEVICE.html#group__CUDART__DEVICE_1g10e20b05a95f638a4071a655503df25d"><span class="xref std std-term"><code class="docutils literal notranslate">cudaDeviceSynchronize(..)</code></span></a> call?</p>
+<ol class="arabic simple">
+<li><p>Everything will execute as normal, the CPU will wait for the GPU to complete the execution before terminating.</p></li>
+<li><p>An error will occur since the GPU will not be able to complete the task before the end of the program is reached.</p></li>
+<li><p>Only some of the threads will print their indices.</p></li>
+<li><p>Nothing will be printed.</p></li>
+</ol>
+</div>
+<div class="admonition-solution solution important dropdown admonition">
+<p class="admonition-title">Solution</p>
+<p>The correct answer is 4: nothing will be printed since the program termination is right after the kernel launch.
+You can also add a <code class="docutils literal notranslate"><span class="pre">sleep(..)</span></code> function call after the kernel to ensure that it completes before the program terminates (make sure to include <code class="docutils literal notranslate"><span class="pre">unistd.h</span></code> to make the sleep function available).</p>
+</div>
+<ol class="arabic simple" start="6">
+<li><p>Compile the code using <code class="docutils literal notranslate"><span class="pre">nvcc</span></code>, run the executable.</p></li>
+<li><p>Modify the code to run in 4 blocks of 32 threads.
+Apart from <code class="docutils literal notranslate"><span class="pre">threadIdx.x</span></code>, wou will need <code class="docutils literal notranslate"><span class="pre">blockIdx.x</span></code> and <code class="docutils literal notranslate"><span class="pre">blockDim.x</span></code> to compute the “global” thread index.
+Print these values and the computed global index.</p></li>
+<li><p>(*) Modify the code to use two-dimensional grid.
+Remember, that the total number of threads per block is limited by 1024 on NVIDIA GPUs.</p></li>
+</ol>
+</div>
+<div class="admonition-why-the-order-of-the-threads-in-the-output-is-random exercise important admonition">
+<p class="admonition-title">Why the order of the threads in the output is random?</p>
+<p>Try executing the program several times to see if there is a pattern in the way the output is printed.
+Try increasing the number of threads per block to 64.
+Can you notice anything interesting in the order of threads within the block?</p>
+</div>
+<div class="admonition-solution solution important dropdown admonition">
+<p class="admonition-title">Solution</p>
+<p>Driver assigns the threads to multiprocessors by blocks.
+There is no guarantee that the first multiprocessor will complete its operations before the second.
+The output is printed as the threads execution reach the corresponding line of the code and which one will be there faster depends on many different factors.
+Within the block, the order seems to be consistent if the block size is 32.
+When the number is larger, you can notice that the order of threads within chunks of 32 threads is consistent.
+However, the order of this chunks can vary.
+On NVIDIA GPU, execution is performed by so-called warps of threads and the size of a warp is exactly 32 for all NVIDIA GPUs.
+Within the warp, the threads execute the same command simultaneously.
+This is why the order within warp is consistent.
+And this is also why one has to be very careful with thread divergency within warp.
+Even if just one thread diverges within warp, the rest of the threads will wait until the divergent thread completes its operations.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../2.01_DeviceQuery/" class="btn btn-neutral float-left" title="Using CUDA API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../2.03_VectorAdd/" class="btn btn-neutral float-right" title="Allocate memory and transfer data" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Artem Zhmurov and individual contributors..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
