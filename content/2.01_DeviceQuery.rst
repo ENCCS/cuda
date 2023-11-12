@@ -14,9 +14,19 @@ First, we want to ask API how many CUDA+capable devices are available, which is 
 
 .. signature:: |cudaGetDeviceCount|
 
-   .. code-block:: CUDA
-      
-      __host__ ​__device__​ cudaError_t cudaGetDeviceCount(int* numDevices)
+   .. tabs::
+
+      .. tab:: CUDA
+
+         .. code-block:: c++
+            
+            __host__ __device__ cudaError_t cudaGetDeviceCount(int* numDevices)
+
+      .. tab:: HIP
+
+         .. code-block:: c++
+            
+            __host__ __device__ cudaError_t cudaGetDeviceCount(int* numDevices)
 
 The function calls the API and returns the number of the available devices in the address provided as a first argument.
 There are a couple of things to notice here.
@@ -36,19 +46,42 @@ To populate the |cudaDeviceProp| structure, CUDA has |cudaGetDeviceProperties| f
 
 .. signature:: |cudaGetDeviceProperties|
          
-   .. code-block:: c++
+   .. tabs::
 
-      __host__​ cudaError_t cudaGetDeviceProperties(cudaDeviceProp* prop, int deviceId)
+      .. tab:: CUDA
+
+         .. code-block:: c++
+            
+            __host__ cudaError_t cudaGetDeviceProperties(cudaDeviceProp* prop, int deviceId)
+
+      .. tab:: HIP
+
+         .. code-block:: c++
+            
+            __host__ cudaError_t cudaGetDeviceProperties(cudaDeviceProp* prop, int deviceId)
+
 
 The function has a |__host__| specifier, which means that one can not call it from the device code.
 It also returns |cudaError_t| structure, which can be |cudaErrorInvalidDevice| in case we are trying to get properties of a non-existing device (e.g. when ``deviceId`` is larger than ``numDevices`` above).
 The function takes a pointer to the |cudaDeviceProp| structure, to which the data is saved and an integer index of the device to get the information about.
 The following code should get you an information on the first device in the system (one with ``deviceId = 0``).
 
-.. code-block:: c++
 
-   cudaGetDeviceProp prop;
-   cudaGetDeviceProperties(&prop, 0);
+.. tabs::
+
+   .. tab:: CUDA
+
+      .. code-block:: c++
+      
+         cudaGetDeviceProp prop;
+         cudaGetDeviceProperties(&prop, 0);
+
+   .. tab:: HIP
+
+      .. code-block:: c++
+      
+         cudaGetDeviceProp prop;
+         cudaGetDeviceProperties(&prop, 0);
 
 Exercise
 --------
