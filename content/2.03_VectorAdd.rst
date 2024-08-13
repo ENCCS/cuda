@@ -48,7 +48,7 @@ To allocate buffer in GPU memory, one has to call the CUDA API function |cudaMal
 
    .. code-block:: cuda
 
-      __host__ ​__device__ ​cudaError_t cudaMalloc(void** devPtr, size_t size)
+      __host__ __device__ cudaError_t cudaMalloc(void** devPtr, size_t size)
 
 We are now getting used to these function having access specifiers and return |cudaError_t|.
 As the first arguments, the function takes a pointer to the buffer in the device memory.
@@ -62,7 +62,7 @@ To release the memory, |cudaFree| function should be used:
    
    .. code-block:: cuda
       
-      __host__ ​__device__​ cudaError_t cudaFree(void* devPtr)
+      __host__ __device__ cudaError_t cudaFree(void* devPtr)
 
 Here, the pointer itself is not updated, 
 
@@ -76,7 +76,7 @@ This is done using the |cudaMemcpy| function, that has the following signature:
 
    .. code-block:: cuda
 
-      __host__ ​cudaError_t cudaMemcpy(void* dst, const void* src, size_t count, cudaMemcpyKind kind)
+      __host__ cudaError_t cudaMemcpy(void* dst, const void* src, size_t count, cudaMemcpyKind kind)
 
 Both copy to and from the device buffer are done using the same function and the direction of the copy is specifies by the last argument, which is |cudaMemcpyKind| enumeration.
 The enumeration can take values |cudaMemcpyHostToHost|, |cudaMemcpyHostToDevice|, |cudaMemcpyDeviceToHost|, |cudaMemcpyDeviceToDevice| or |cudaMemcpyDefault|.

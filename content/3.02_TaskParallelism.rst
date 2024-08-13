@@ -133,7 +133,7 @@ Creating a stream is done by calling the following function:
     
     .. code-block:: CUDA
         
-        __host__​ cudaError_t cudaStreamCreate(cudaStream_t* stream)
+        __host__ cudaError_t cudaStreamCreate(cudaStream_t* stream)
 
 This function can only be called from the host code and will return |cudaError_t| object if something went wrong.
 It takes a pointer to a |cudaStream_t| object, which should be initialized.
@@ -161,7 +161,7 @@ This is also called pinning, and should be done by using CUDA API while allocati
     
     .. code-block:: CUDA
         
-        __host__ ​cudaError_t cudaMallocHost(void** ptr, size_t size)
+        __host__ cudaError_t cudaMallocHost(void** ptr, size_t size)
 
 The function works the same way as the |cudaMalloc|, we are already familiar with.
 It takes the pointer to the address in memory where allocation should happen and size of the allocation in bytes.
@@ -172,7 +172,7 @@ To release the pinned memory, one should use the CUDA API function.
     
     .. code-block:: CUDA
         
-        __host__ ​cudaError_t cudaFreeHost(void* ptr)
+        __host__ cudaError_t cudaFreeHost(void* ptr)
 
 Now the host arrays are pinned, we can do the host to device and device to host copies asynchroneously.
 
@@ -180,7 +180,7 @@ Now the host arrays are pinned, we can do the host to device and device to host 
     
     .. code-block:: CUDA
         
-        __host__ ​__device__​ cudaError_t cudaMemcpyAsync(void* dst, const void* src, size_t count, cudaMemcpyKind kind, cudaStream_t stream = 0)
+        __host__ __device__ cudaError_t cudaMemcpyAsync(void* dst, const void* src, size_t count, cudaMemcpyKind kind, cudaStream_t stream = 0)
 
 The signature of this function is very similar to the synchronous variant we used before.
 The only difference is that it now takes one extra argument --- the stream in which the copy should be executed.
@@ -194,7 +194,7 @@ This can be done with the following function from CUDA API:
     
     .. code-block:: CUDA
 
-        __host__ ​__device__​ cudaError_t cudaDeviceSynchronize()
+        __host__ __device__ cudaError_t cudaDeviceSynchronize()
 
 Now we have all the means to execute the data transfers and kernel calls asynchronously.
 
@@ -329,7 +329,7 @@ First, one needs to create an |cudaEvent_t| object, which is done by the |cudaEv
     
     .. code-block:: CUDA
 
-        __host__ ​cudaError_t cudaEventCreate(cudaEvent_t* event)
+        __host__ cudaError_t cudaEventCreate(cudaEvent_t* event)
 
 This function will initialize its only argument.
 The events can only be created on host, since one does not need one for each GPU thread.
@@ -341,7 +341,7 @@ With event created, we need to be able to record and wait for it, which is done 
     
     .. code-block:: CUDA
 
-        __host__​ __device__​ cudaError_t cudaEventRecord(cudaEvent_t event, cudaStream_t stream = 0)
+        __host__ __device__ cudaError_t cudaEventRecord(cudaEvent_t event, cudaStream_t stream = 0)
 
 This will record an event in the provided stream.
 Having the event recorded allows the host to see at which point the stream execution currently is.
@@ -355,7 +355,7 @@ In order for another stream to wait until the event is recorded, one can use the
     
     .. code-block:: CUDA
 
-        __host__​ __device__ ​cudaError_t cudaStreamWaitEvent(cudaStream_t stream, cudaEvent_t event, unsigned int flags = 0)
+        __host__ __device__ cudaError_t cudaStreamWaitEvent(cudaStream_t stream, cudaEvent_t event, unsigned int flags = 0)
 
 This takes an event and stream as arguments.
 Calling this function will stop the execution in the provided stream until the event is recorded.

@@ -103,7 +103,7 @@ This can be done with the following function from CUDA API:
     
     .. code-block:: CUDA
 
-        __host__ ​__device__​ cudaError_t cudaDeviceSynchronize()
+        __host__ __device__ cudaError_t cudaDeviceSynchronize()
 
 We are already familiar with |__host__| and |__device__| specifiers: this function can be used in both host and device code.
 As usual, the return type is |cudaError_t|, which may indicate that there was an error in execution and the function does not take any arguments.
