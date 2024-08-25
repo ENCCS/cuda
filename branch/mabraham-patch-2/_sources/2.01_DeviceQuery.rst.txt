@@ -1,0 +1,91 @@
+.. _device_query:
+
+Using CUDA API
+==============
+
+List available devices and their properties
+-------------------------------------------
+
+Let us start familiarizing ourselves with CUDA by writing a simple "Hello CUDA" program, which will query all available devices and print some information on them.
+We will start with a basic ``.cpp`` code, change it so it will be compiled by CUDA compiler and do some CUDA API call, to see what devices are available.
+
+To do that, we are going to need a couple of CUDA API functions.
+First, we want to ask API how many CUDA+capable devices are available, which is done by following function:
+
+.. signature:: |cudaGetDeviceCount|
+
+   .. code-block:: CUDA
+      
+      __host__ ​__device__​ cudaError_t cudaGetDeviceCount(int* numDevices)
+
+The function calls the API and returns the number of the available devices in the address provided as a first argument.
+There are a couple of things to notice here.
+First, the function is defined with two CUDA specifiers |__host__| and |__device__|.
+This means that it is available in both host and device code.
+Second, as most of CUDA calls, this function returns |cudaError_t| enumeration type, which can contain a error message if something went wrong.
+In case of success, |cudaSuccess| is returned.
+The actual number of devices is returned in the only argument the function takes, i.e. one needs to declare an integer and pass a pointer to it.
+The function will then update the value at this address.
+This type of signature is quite common to CUDA functions, with most of them returning |cudaError_t| type and taking a pointer for its actual output.
+
+With the number of devices known, we can cycle through them and check what kind of devices are available, their names and capabilities.
+In CUDA, these are stored in |cudaDeviceProp| structure.
+This structure contains extensive information on the device, for instance its name (``prop.name``), major and minor compute capabilities (``prop.major`` and ``prop.minor``), number of streaming processors (``prop.multiProcessorCount``), core clock (``prop.clockRate``) and available memory (``prop.totalGlobalMem``).
+See the `cudaDeviceProp API reference <https://docs.nvidia.com/cuda/cuda-runtime-api/structcudaDeviceProp.html#structcudaDeviceProp>`_ for full list of fields in the |cudaDeviceProp| structure.
+To populate the |cudaDeviceProp| structure, CUDA has |cudaGetDeviceProperties| function:
+
+.. signature:: |cudaGetDeviceProperties|
+         
+   .. code-block:: c++
+
+      __host__​ cudaError_t cudaGetDeviceProperties(cudaDeviceProp* prop, int deviceId)
+
+The function has a |__host__| specifier, which means that one can not call it from the device code.
+It also returns |cudaError_t| structure, which can be |cudaErrorInvalidDevice| in case we are trying to get properties of a non-existing device (e.g. when ``deviceId`` is larger than ``numDevices`` above).
+The function takes a pointer to the |cudaDeviceProp| structure, to which the data is saved and an integer index of the device to get the information about.
+The following code should get you an information on the first device in the system (one with ``deviceId = 0``).
+
+.. code-block:: c++
+
+   cudaGetDeviceProp prop;
+   cudaGetDeviceProperties(&prop, 0);
+
+Exercise
+--------
+
+.. typealong:: Getting the information on available devices using CUDA API 
+
+   .. tabs::
+
+      .. tab:: C++
+
+         .. literalinclude:: ../examples/2.01_DeviceQuery/list_devices.cpp
+            :language: c++
+
+      .. tab:: Solution
+
+         .. literalinclude:: ../examples/2.01_DeviceQuery/Solution/list_devices_ref.cu
+            :language: CUDA
+      
+      .. tab:: Extended solution
+
+         .. literalinclude:: ../examples/2.01_DeviceQuery/Solution/list_devices_ref_extended.cu
+            :language: CUDA
+
+   1. We need the compiler to be aware that it is dealing with source file that may contain CUDA code.
+      To do so, we change the extension of the file to ``.cu``.
+      We will not be using the GPU yet, only checking if we have some available.
+      To do so, we will be using the CUDA API functions.
+      Changing the extension to ``.cu`` will make sure that the ``nvcc`` compiler will add all the necessary includes and will be aware that the code can contain CUDA API calls.
+
+   2. To get the number of devices, use the |cudaGetDeviceCount| CUDA API function.
+      
+
+   3. Now that we know how many devices we have, we can cycle through them and get properties of each one.
+      Cycle through the device indices from zero to the number of devices that you got from the previous function call and call the |cudaGetDeviceProperties| for each of them.
+      Print the name of each device, number of multiprocessors and their clock rate.
+      
+   4. Note that the total number of CUDA cores is not contained in |cudaDeviceProp| structure.
+      This is so, because different devices can have different number of CUDA cores per streaming module (multiprocessor).
+      This number can by up to 192, depending on compute capabilities major and minor version of the device.
+      The provided "extended" solution has a helper function from CUDA SDK examples, that can get this number depending on ``prop.major`` and ``prop.minor``.

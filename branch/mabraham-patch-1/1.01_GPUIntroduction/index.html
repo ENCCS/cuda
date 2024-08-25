@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Introduction to GPU &mdash; CUDA training materials  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/togglebutton.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/mystnb.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sphinx_lesson.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sphinx_rtd_theme_ext_color_contrast.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/overrides.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/tabs.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/overrides.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/togglebutton.js"></script>
+        <script src="../_static/clipboard.min.js"></script>
+        <script src="../_static/copybutton.js"></script>
+        <script src="../_static/minipres.js"></script>
+        <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex/" />
+    <link rel="search" title="Search" href="../search/" />
+    <link rel="next" title="Using CUDA API" href="../2.01_DeviceQuery/" />
+    <link rel="prev" title="CUDA training" href="../" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../" class="icon icon-home"> CUDA training materials
+            <img src="../_static/ENCCS.jpg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search/" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Table of contents</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Introduction to GPU</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#moore-s-law">Moore’s law</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#graphics-processing-units">Graphics processing units</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#exposing-parallelism">Exposing parallelism</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#using-gpus">Using GPUs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#summary">Summary</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../2.01_DeviceQuery/">Using CUDA API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../2.02_HelloGPU/">Launching the GPU kernel</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../2.03_VectorAdd/">Allocate memory and transfer data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../2.04_HeatEquation/">Solving heat equation with CUDA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../3.01_ParallelReduction/">Optimizing the GPU kernel</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../3.02_TaskParallelism/">Asynchronous execution</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../quick-reference/">Quick Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/">Instructor’s guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../">CUDA training materials</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../" class="icon icon-home"></a> &raquo;</li>
+      <li>Introduction to GPU</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/zhmurov/CUDA/blob/main/content/1.01_GPUIntroduction.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="introduction-to-gpu">
+<span id="gpu-introduction"></span><h1>Introduction to GPU<a class="headerlink" href="#introduction-to-gpu" title="Permalink to this headline"></a></h1>
+<div class="section" id="moore-s-law">
+<h2>Moore’s law<a class="headerlink" href="#moore-s-law" title="Permalink to this headline"></a></h2>
+<p>The number of transistors in a dense integrated circuit doubles about every two years.
+More transistors means smaller size of a single element, so higher core frequency can be achieved.
+However, power consumption scales as frequency in third power, so the growth in the core frequency has slowed down significantly.
+Higher performance of a single node has to rely on its more complicated structure and still can be achieved with SIMD, branch prediction, etc.</p>
+<div class="figure align-center" id="id1">
+<img alt="../_images/microprocessor-trend-data.png" src="../_images/microprocessor-trend-data.png" />
+<p class="caption"><span class="caption-text">The evolution of microprocessors.
+The number of transistors per chip increase every 2 years or so.
+However it can no longer be explored by the core frequency due to power consumption limits.
+Before 2000, the increase in the single core clock frequency was the major source of the increase in the performance.
+Mid 2000 mark a transition towards multi-core processors.</span><a class="headerlink" href="#id1" title="Permalink to this image"></a></p>
+</div>
+<p>Achieving performance has been based on two main strategies over the years:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Increase the single processor performance:</p></li>
+<li><p>More recently, increase the number of physical cores.</p></li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="graphics-processing-units">
+<h2>Graphics processing units<a class="headerlink" href="#graphics-processing-units" title="Permalink to this headline"></a></h2>
+<p>The Graphics processing units (GPU) have been the most common accelerators during the last few years, the term GPU sometimes is used interchangeably with the term accelerator.
+GPUs were initially developed for highly-parallel task of graphic processing.
+Over the years, were used more and more in HPC.
+GPUs are a specialized parallel hardware for floating point operations.
+GPUs are co-processors for traditional CPUs: CPU still controls the work flow, delegating highly-parallel tasks to the GPU.
+Based on highly parallel architectures, which allows to take advantage of the increasing number of transistors.</p>
+<p>Using GPUs allows one to achieve very high performance per node.
+As a result, the single GPU-equipped workstation can outperform small CPU-based cluster for some type of computational tasks.
+The drawback is: usually major rewrites of programs is required.</p>
+<div class="figure align-center" id="id2">
+<img alt="../_images/CPUAndGPU.png" src="../_images/CPUAndGPU.png" />
+<p class="caption"><span class="caption-text">A comparison of the CPU and GPU architecture.
+CPU (left) has complex core structure and pack several cores on a single chip.
+GPU cores are very simple in comparison, they also share data and control between each other.
+This allows to pack more cores on a single chip, thus achieving very high compute density.</span><a class="headerlink" href="#id2" title="Permalink to this image"></a></p>
+</div>
+<p>One of the most important features that allows the accelerators to reach this high performance is their scalability.
+Computational cores on accelerators are usually grouped into multiprocessors.
+The multiprocessors share the data and logical elements.
+This alows to achieve a very high density of a compute elements on a GPU.
+This also allows for better scaling: more multiprocessors means more raw performance and this is very easy to achieve with more transistors available.</p>
+<p>Accelerators are a separate main circuit board with the processor, memory, power management, etc.
+It is connected to the motherboard with CPUs via PCIe bus.
+Having its own memory means that the data has to be copied to and from it.
+CPU acts as a main processor, controlling the execution workflow.
+It copies the data from its own memory to the GPU memory, executes the program and copies the results back.
+GPUs runs tens of thousands of threads simultaneously on thousands of cores and does not do much of the data management.
+With many cores trying to access the memory simultaneously and with little cache available, the accelerator can run out of memory very quickly.
+This makes the data management and its access pattern is essential on the GPU.
+Accelerators like to be overloaded with the number of threads, because they can switch between threads very quickly.
+This allows to hide the memory operations: while some threads wait, others can compute.</p>
+</div>
+<div class="section" id="exposing-parallelism">
+<h2>Exposing parallelism<a class="headerlink" href="#exposing-parallelism" title="Permalink to this headline"></a></h2>
+<p>The are two types of parallelism tha can be explored.
+The data parallelism is when the data can be distributed across computational units that can run in parallel.
+They than process the data applying the same or very simular operation to diffenet data elements.
+A common example is applying a blur filter to an image — the same function is applied to all the pixels on the image.
+This parallelism is natural for the GPU, where the same instruction set is executed in multiple threads.</p>
+<div class="figure align-center" id="id3">
+<a class="reference internal image-reference" href="../_images/ENCCS-OpenACC-CUDA_TaskParallelism_Explanation.png"><img alt="../_images/ENCCS-OpenACC-CUDA_TaskParallelism_Explanation.png" src="../_images/ENCCS-OpenACC-CUDA_TaskParallelism_Explanation.png" style="width: 715.2px; height: 265.6px;" /></a>
+<p class="caption"><span class="caption-text">Data parallelism and task parallelism.
+The data parallelism is when the same operation applies to multiple data (e.g. multiple elements of an array are transformed).
+The task parallelism implies that there are more than one independent task that, in principle, can be executed in parallel.</span><a class="headerlink" href="#id3" title="Permalink to this image"></a></p>
+</div>
+<p>Data parallelism can usually be explored by the GPUs quite easily.
+The most basic approach would be finding a loop over many data elements and converting it into a GPU kernel.
+If the number of elements in the data set if fairly large (tens or hundred of thousands elements), the GPU should perform quite well.
+Although it would be odd to expect absolute maximum performance from such a naive approach, it is often the one to take.
+Getting absolute maximum out of the data parallelism requires good understanding of how GPU works.</p>
+<p>Another type of parallelism is a task parallelism.
+This is when an application consists of more than one task that requiring to perform different operations with (the same or) different data.
+An example of task parallelism is cooking: slicing vegetables and grilling are very different tasks and can be done at the same time.
+Note that the tasks can consume totally different resources, which also can be explored.</p>
+</div>
+<div class="section" id="using-gpus">
+<h2>Using GPUs<a class="headerlink" href="#using-gpus" title="Permalink to this headline"></a></h2>
+<p>From less to more difficult:</p>
+<ol class="arabic simple">
+<li><p>Use existing GPU applications</p></li>
+<li><p>Use accelerated libraries</p></li>
+<li><p>Directive based methods</p>
+<ul class="simple">
+<li><p>OpenMP</p></li>
+<li><p>OpenACC</p></li>
+</ul>
+</li>
+<li><p>Use lower level language</p>
+<ul class="simple">
+<li><p><strong>CUDA</strong></p></li>
+<li><p>HIP</p></li>
+<li><p>OpenCL</p></li>
+<li><p>SYCL</p></li>
+</ul>
+</li>
+</ol>
+</div>
+<div class="section" id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p>GPUs are highly parallel devices that can execute certain parts of the program in many parallel threads.</p></li>
+<li><p>In order to use the GPU efficiency, one has to split their task in many sub-tasks that can run simultaneously.</p></li>
+<li><p>Running your application asynchronously allows to overlap different tasks, including data transfers, GPU and CPU compute kernel.</p></li>
+<li><p>Language extensions, such as CUDA, HIP, can give more performance, but harder to use.</p></li>
+<li><p>Directive based methods are easy to implement, but can not leverage all the GPU capabilities.</p></li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../" class="btn btn-neutral float-left" title="CUDA training" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../2.01_DeviceQuery/" class="btn btn-neutral float-right" title="Using CUDA API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Artem Zhmurov and individual contributors..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

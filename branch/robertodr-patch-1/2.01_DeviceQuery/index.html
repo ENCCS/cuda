@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Using CUDA API &mdash; CUDA training materials  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/togglebutton.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/mystnb.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sphinx_lesson.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sphinx_rtd_theme_ext_color_contrast.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/overrides.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/tabs.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/overrides.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/togglebutton.js"></script>
+        <script src="../_static/clipboard.min.js"></script>
+        <script src="../_static/copybutton.js"></script>
+        <script src="../_static/minipres.js"></script>
+        <script src="../_static/tabs.js"></script>
+        <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex/" />
+    <link rel="search" title="Search" href="../search/" />
+    <link rel="next" title="Launching the GPU kernel" href="../2.02_HelloGPU/" />
+    <link rel="prev" title="Introduction to GPU" href="../1.01_GPUIntroduction/" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../" class="icon icon-home"> CUDA training materials
+            <img src="../_static/ENCCS.jpg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search/" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Table of contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../1.01_GPUIntroduction/">Introduction to GPU</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Using CUDA API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#list-available-devices-and-their-properties">List available devices and their properties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#exercise">Exercise</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../2.02_HelloGPU/">Launching the GPU kernel</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../2.03_VectorAdd/">Allocate memory and transfer data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../2.04_HeatEquation/">Solving heat equation with CUDA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../3.01_ParallelReduction/">Optimizing the GPU kernel</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../3.02_TaskParallelism/">Asynchronous execution</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../quick-reference/">Quick Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/">Instructor’s guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../">CUDA training materials</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../" class="icon icon-home"></a> &raquo;</li>
+      <li>Using CUDA API</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/ENCCS/CUDA/blob/main/content/2.01_DeviceQuery.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="using-cuda-api">
+<span id="device-query"></span><h1>Using CUDA API<a class="headerlink" href="#using-cuda-api" title="Permalink to this headline"></a></h1>
+<div class="section" id="list-available-devices-and-their-properties">
+<h2>List available devices and their properties<a class="headerlink" href="#list-available-devices-and-their-properties" title="Permalink to this headline"></a></h2>
+<p>Let us start familiarizing ourselves with CUDA by writing a simple “Hello CUDA” program, which will query all available devices and print some information on them.
+We will start with a basic <code class="docutils literal notranslate"><span class="pre">.cpp</span></code> code, change it so it will be compiled by CUDA compiler and do some CUDA API call, to see what devices are available.</p>
+<p>To do that, we are going to need a couple of CUDA API functions.
+First, we want to ask API how many CUDA+capable devices are available, which is done by following function:</p>
+<div class="admonition-cudagetdevicecount signature toggle-shown dropdown admonition">
+<p class="admonition-title"><a class="reference internal" href="https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__DEVICE.html#group__CUDART__DEVICE_1g18808e54893cfcaafefeab31a73cc55f"><span class="xref std std-term"><code class="docutils literal notranslate">cudaGetDeviceCount(..)</code></span></a></p>
+<div class="highlight-CUDA notranslate"><div class="highlight"><pre><span></span>__host__ ​__device__​ cudaError_t cudaGetDeviceCount(int* numDevices)
+</pre></div>
+</div>
+</div>
+<p>The function calls the API and returns the number of the available devices in the address provided as a first argument.
+There are a couple of things to notice here.
+First, the function is defined with two CUDA specifiers <a class="reference internal" href="https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#host"><span class="xref std std-term"><code class="docutils literal notranslate">__host__</code></span></a> and <a class="reference internal" href="https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#device-function-specifier"><span class="xref std std-term"><code class="docutils literal notranslate">__device__</code></span></a>.
+This means that it is available in both host and device code.
+Second, as most of CUDA calls, this function returns <a class="reference internal" href="https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__TYPES.html#group__CUDART__TYPES_1g3f51e3575c2178246db0a94a430e0038"><span class="xref std std-term"><code class="docutils literal notranslate">cudaError_t</code></span></a> enumeration type, which can contain a error message if something went wrong.
+In case of success, <a class="reference internal" href="https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__TYPES.html#group__CUDART__TYPES_1g3f51e3575c2178246db0a94a430e0038"><span class="xref std std-term"><code class="docutils literal notranslate">cudaSuccess</code></span></a> is returned.
+The actual number of devices is returned in the only argument the function takes, i.e. one needs to declare an integer and pass a pointer to it.
+The function will then update the value at this address.
+This type of signature is quite common to CUDA functions, with most of them returning <a class="reference internal" href="https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__TYPES.html#group__CUDART__TYPES_1g3f51e3575c2178246db0a94a430e0038"><span class="xref std std-term"><code class="docutils literal notranslate">cudaError_t</code></span></a> type and taking a pointer for its actual output.</p>
+<p>With the number of devices known, we can cycle through them and check what kind of devices are available, their names and capabilities.
+In CUDA, these are stored in <a class="reference internal" href="https://docs.nvidia.com/cuda/cuda-runtime-api/structcudaDeviceProp.html"><span class="xref std std-term"><code class="docutils literal notranslate">cudaDeviceProp</code></span></a> structure.
+This structure contains extensive information on the device, for instance its name (<code class="docutils literal notranslate"><span class="pre">prop.name</span></code>), major and minor compute capabilities (<code class="docutils literal notranslate"><span class="pre">prop.major</span></code> and <code class="docutils literal notranslate"><span class="pre">prop.minor</span></code>), number of streaming processors (<code class="docutils literal notranslate"><span class="pre">prop.multiProcessorCount</span></code>), core clock (<code class="docutils literal notranslate"><span class="pre">prop.clockRate</span></code>) and available memory (<code class="docutils literal notranslate"><span class="pre">prop.totalGlobalMem</span></code>).
+See the <a class="reference external" href="https://docs.nvidia.com/cuda/cuda-runtime-api/structcudaDeviceProp.html#structcudaDeviceProp">cudaDeviceProp API reference</a> for full list of fields in the <a class="reference internal" href="https://docs.nvidia.com/cuda/cuda-runtime-api/structcudaDeviceProp.html"><span class="xref std std-term"><code class="docutils literal notranslate">cudaDeviceProp</code></span></a> structure.
+To populate the <a class="reference internal" href="https://docs.nvidia.com/cuda/cuda-runtime-api/structcudaDeviceProp.html"><span class="xref std std-term"><code class="docutils literal notranslate">cudaDeviceProp</code></span></a> structure, CUDA has <a class="reference internal" href="https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__DEVICE.html#group__CUDART__DEVICE_1g1bf9d625a931d657e08db2b4391170f0"><span class="xref std std-term"><code class="docutils literal notranslate">cudaGetDeviceProperties(..)</code></span></a> function:</p>
+<div class="admonition-cudagetdeviceproperties signature toggle-shown dropdown admonition">
+<p class="admonition-title"><a class="reference internal" href="https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__DEVICE.html#group__CUDART__DEVICE_1g1bf9d625a931d657e08db2b4391170f0"><span class="xref std std-term"><code class="docutils literal notranslate">cudaGetDeviceProperties(..)</code></span></a></p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span>__host__​ cudaError_t cudaGetDeviceProperties(cudaDeviceProp* prop, int deviceId)
+</pre></div>
+</div>
+</div>
+<p>The function has a <a class="reference internal" href="https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#host"><span class="xref std std-term"><code class="docutils literal notranslate">__host__</code></span></a> specifier, which means that one can not call it from the device code.
+It also returns <a class="reference internal" href="https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__TYPES.html#group__CUDART__TYPES_1g3f51e3575c2178246db0a94a430e0038"><span class="xref std std-term"><code class="docutils literal notranslate">cudaError_t</code></span></a> structure, which can be <a class="reference internal" href="https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__TYPES.html#group__CUDART__TYPES_1g3f51e3575c2178246db0a94a430e0038"><span class="xref std std-term"><code class="docutils literal notranslate">cudaErrorInvalidDevice</code></span></a> in case we are trying to get properties of a non-existing device (e.g. when <code class="docutils literal notranslate"><span class="pre">deviceId</span></code> is larger than <code class="docutils literal notranslate"><span class="pre">numDevices</span></code> above).
+The function takes a pointer to the <a class="reference internal" href="https://docs.nvidia.com/cuda/cuda-runtime-api/structcudaDeviceProp.html"><span class="xref std std-term"><code class="docutils literal notranslate">cudaDeviceProp</code></span></a> structure, to which the data is saved and an integer index of the device to get the information about.
+The following code should get you an information on the first device in the system (one with <code class="docutils literal notranslate"><span class="pre">deviceId</span> <span class="pre">=</span> <span class="pre">0</span></code>).</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">cudaGetDeviceProp</span><span class="w"> </span><span class="n">prop</span><span class="p">;</span><span class="w"></span>
+<span class="n">cudaGetDeviceProperties</span><span class="p">(</span><span class="o">&amp;</span><span class="n">prop</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="exercise">
+<h2>Exercise<a class="headerlink" href="#exercise" title="Permalink to this headline"></a></h2>
+<div class="admonition-getting-the-information-on-available-devices-using-cuda-api typealong toggle-shown dropdown admonition">
+<p class="admonition-title">Getting the information on available devices using CUDA API</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-0-0-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-0-0-0" name="0-0" role="tab" tabindex="0">C++</button><button aria-controls="panel-0-0-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-1" name="0-1" role="tab" tabindex="-1">Solution</button><button aria-controls="panel-0-0-2" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-2" name="0-2" role="tab" tabindex="-1">Extended solution</button></div><div aria-labelledby="tab-0-0-0" class="sphinx-tabs-panel" id="panel-0-0-0" name="0-0" role="tabpanel" tabindex="0"><div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;I can see %d device(s) if the code is compiled with gcc:.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-0-0-1" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-1" name="0-1" role="tabpanel" tabindex="0"><div class="highlight-CUDA notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">driverVersion</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">cudaDriverGetVersion</span><span class="p">(</span><span class="o">&amp;</span><span class="n">driverVersion</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;CUDA driver: %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">driverVersion</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">runtimeVersion</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">cudaRuntimeGetVersion</span><span class="p">(</span><span class="o">&amp;</span><span class="n">runtimeVersion</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;CUDA runtime: %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">runtimeVersion</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">int</span><span class="w">         </span><span class="n">numDevices</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">cudaError_t</span><span class="w"> </span><span class="n">stat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cudaGetDeviceCount</span><span class="p">(</span><span class="o">&amp;</span><span class="n">numDevices</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">numDevices</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">cudaDeviceProp</span><span class="w"> </span><span class="n">prop</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">stat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cudaGetDeviceProperties</span><span class="p">(</span><span class="o">&amp;</span><span class="n">prop</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d: %s, CC %d.%d, %d SMs running at %dMHz, %luMB</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">prop</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="n">prop</span><span class="p">.</span><span class="n">major</span><span class="p">,</span><span class="w"> </span><span class="n">prop</span><span class="p">.</span><span class="n">minor</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="n">prop</span><span class="p">.</span><span class="n">multiProcessorCount</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="n">prop</span><span class="p">.</span><span class="n">clockRate</span><span class="o">/</span><span class="mi">1000</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="n">prop</span><span class="p">.</span><span class="n">totalGlobalMem</span><span class="o">/</span><span class="mi">1024</span><span class="o">/</span><span class="mi">1024</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-0-0-2" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-2" name="0-2" role="tabpanel" tabindex="0"><div class="highlight-CUDA notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+
+<span class="c1">// Beginning of GPU Architecture definitions</span>
+<span class="kr">inline</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">_ConvertSMVer2Cores</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">major</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">minor</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="c1">// Defines for GPU Architecture types (using the SM version to determine</span>
+<span class="w">  </span><span class="c1">// the # of cores per SM</span>
+<span class="w">  </span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span> <span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">SM</span><span class="p">;</span><span class="w">  </span><span class="c1">// 0xMm (hexidecimal notation), M = SM Major version,</span>
+<span class="w">    </span><span class="c1">// and m = SM minor version</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">Cores</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="n">sSMtoCores</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">  </span><span class="n">sSMtoCores</span><span class="w"> </span><span class="n">nGpuArchCoresPerSM</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="p">{</span><span class="mh">0x30</span><span class="p">,</span><span class="w"> </span><span class="mi">192</span><span class="p">},</span><span class="w"></span>
+<span class="w">      </span><span class="p">{</span><span class="mh">0x32</span><span class="p">,</span><span class="w"> </span><span class="mi">192</span><span class="p">},</span><span class="w"></span>
+<span class="w">      </span><span class="p">{</span><span class="mh">0x35</span><span class="p">,</span><span class="w"> </span><span class="mi">192</span><span class="p">},</span><span class="w"></span>
+<span class="w">      </span><span class="p">{</span><span class="mh">0x37</span><span class="p">,</span><span class="w"> </span><span class="mi">192</span><span class="p">},</span><span class="w"></span>
+<span class="w">      </span><span class="p">{</span><span class="mh">0x50</span><span class="p">,</span><span class="w"> </span><span class="mi">128</span><span class="p">},</span><span class="w"></span>
+<span class="w">      </span><span class="p">{</span><span class="mh">0x52</span><span class="p">,</span><span class="w"> </span><span class="mi">128</span><span class="p">},</span><span class="w"></span>
+<span class="w">      </span><span class="p">{</span><span class="mh">0x53</span><span class="p">,</span><span class="w"> </span><span class="mi">128</span><span class="p">},</span><span class="w"></span>
+<span class="w">      </span><span class="p">{</span><span class="mh">0x60</span><span class="p">,</span><span class="w">  </span><span class="mi">64</span><span class="p">},</span><span class="w"></span>
+<span class="w">      </span><span class="p">{</span><span class="mh">0x61</span><span class="p">,</span><span class="w"> </span><span class="mi">128</span><span class="p">},</span><span class="w"></span>
+<span class="w">      </span><span class="p">{</span><span class="mh">0x62</span><span class="p">,</span><span class="w"> </span><span class="mi">128</span><span class="p">},</span><span class="w"></span>
+<span class="w">      </span><span class="p">{</span><span class="mh">0x70</span><span class="p">,</span><span class="w">  </span><span class="mi">64</span><span class="p">},</span><span class="w"></span>
+<span class="w">      </span><span class="p">{</span><span class="mh">0x72</span><span class="p">,</span><span class="w">  </span><span class="mi">64</span><span class="p">},</span><span class="w"></span>
+<span class="w">      </span><span class="p">{</span><span class="mh">0x75</span><span class="p">,</span><span class="w">  </span><span class="mi">64</span><span class="p">},</span><span class="w"></span>
+<span class="w">      </span><span class="p">{</span><span class="mh">0x80</span><span class="p">,</span><span class="w">  </span><span class="mi">64</span><span class="p">},</span><span class="w"></span>
+<span class="w">      </span><span class="p">{</span><span class="mh">0x86</span><span class="p">,</span><span class="w"> </span><span class="mi">128</span><span class="p">},</span><span class="w"></span>
+<span class="w">      </span><span class="p">{</span><span class="mi">-1</span><span class="p">,</span><span class="w"> </span><span class="mi">-1</span><span class="p">}};</span><span class="w"></span>
+
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">index</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">nGpuArchCoresPerSM</span><span class="p">[</span><span class="n">index</span><span class="p">].</span><span class="n">SM</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">-1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">nGpuArchCoresPerSM</span><span class="p">[</span><span class="n">index</span><span class="p">].</span><span class="n">SM</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="p">((</span><span class="n">major</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">minor</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">      </span><span class="k">return</span><span class="w"> </span><span class="n">nGpuArchCoresPerSM</span><span class="p">[</span><span class="n">index</span><span class="p">].</span><span class="n">Cores</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="n">index</span><span class="o">++</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="p">}</span><span class="w"></span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">driverVersion</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">cudaDriverGetVersion</span><span class="p">(</span><span class="o">&amp;</span><span class="n">driverVersion</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;CUDA driver: %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">driverVersion</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">runtimeVersion</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">cudaRuntimeGetVersion</span><span class="p">(</span><span class="o">&amp;</span><span class="n">runtimeVersion</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;CUDA runtime: %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">runtimeVersion</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">int</span><span class="w">         </span><span class="n">numDevices</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">cudaError_t</span><span class="w"> </span><span class="n">stat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cudaGetDeviceCount</span><span class="p">(</span><span class="o">&amp;</span><span class="n">numDevices</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">numDevices</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">cudaDeviceProp</span><span class="w"> </span><span class="n">prop</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">stat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cudaGetDeviceProperties</span><span class="p">(</span><span class="o">&amp;</span><span class="n">prop</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%d: %s, CC %d.%d, %dx%d=%d@%dMHz CUDA cores, %luMB</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">prop</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="n">prop</span><span class="p">.</span><span class="n">major</span><span class="p">,</span><span class="w"> </span><span class="n">prop</span><span class="p">.</span><span class="n">minor</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="n">prop</span><span class="p">.</span><span class="n">multiProcessorCount</span><span class="p">,</span><span class="w"> </span><span class="n">_ConvertSMVer2Cores</span><span class="p">(</span><span class="n">prop</span><span class="p">.</span><span class="n">major</span><span class="p">,</span><span class="w"> </span><span class="n">prop</span><span class="p">.</span><span class="n">minor</span><span class="p">),</span><span class="w"></span>
+<span class="w">            </span><span class="n">prop</span><span class="p">.</span><span class="n">multiProcessorCount</span><span class="o">*</span><span class="n">_ConvertSMVer2Cores</span><span class="p">(</span><span class="n">prop</span><span class="p">.</span><span class="n">major</span><span class="p">,</span><span class="w"> </span><span class="n">prop</span><span class="p">.</span><span class="n">minor</span><span class="p">),</span><span class="w"> </span><span class="n">prop</span><span class="p">.</span><span class="n">clockRate</span><span class="o">/</span><span class="mi">1000</span><span class="p">,</span><span class="w"></span>
+<span class="w">            </span><span class="n">prop</span><span class="p">.</span><span class="n">totalGlobalMem</span><span class="o">/</span><span class="mi">1024</span><span class="o">/</span><span class="mi">1024</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</div></div>
+<ol class="arabic simple">
+<li><p>We need the compiler to be aware that it is dealing with source file that may contain CUDA code.
+To do so, we change the extension of the file to <code class="docutils literal notranslate"><span class="pre">.cu</span></code>.
+We will not be using the GPU yet, only checking if we have some available.
+To do so, we will be using the CUDA API functions.
+Changing the extension to <code class="docutils literal notranslate"><span class="pre">.cu</span></code> will make sure that the <code class="docutils literal notranslate"><span class="pre">nvcc</span></code> compiler will add all the necessary includes and will be aware that the code can contain CUDA API calls.</p></li>
+<li><p>To get the number of devices, use the <a class="reference internal" href="https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__DEVICE.html#group__CUDART__DEVICE_1g18808e54893cfcaafefeab31a73cc55f"><span class="xref std std-term"><code class="docutils literal notranslate">cudaGetDeviceCount(..)</code></span></a> CUDA API function.</p></li>
+<li><p>Now that we know how many devices we have, we can cycle through them and get properties of each one.
+Cycle through the device indices from zero to the number of devices that you got from the previous function call and call the <a class="reference internal" href="https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__DEVICE.html#group__CUDART__DEVICE_1g1bf9d625a931d657e08db2b4391170f0"><span class="xref std std-term"><code class="docutils literal notranslate">cudaGetDeviceProperties(..)</code></span></a> for each of them.
+Print the name of each device, number of multiprocessors and their clock rate.</p></li>
+<li><p>Note that the total number of CUDA cores is not contained in <a class="reference internal" href="https://docs.nvidia.com/cuda/cuda-runtime-api/structcudaDeviceProp.html"><span class="xref std std-term"><code class="docutils literal notranslate">cudaDeviceProp</code></span></a> structure.
+This is so, because different devices can have different number of CUDA cores per streaming module (multiprocessor).
+This number can by up to 192, depending on compute capabilities major and minor version of the device.
+The provided “extended” solution has a helper function from CUDA SDK examples, that can get this number depending on <code class="docutils literal notranslate"><span class="pre">prop.major</span></code> and <code class="docutils literal notranslate"><span class="pre">prop.minor</span></code>.</p></li>
+</ol>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../1.01_GPUIntroduction/" class="btn btn-neutral float-left" title="Introduction to GPU" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../2.02_HelloGPU/" class="btn btn-neutral float-right" title="Launching the GPU kernel" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Artem Zhmurov and individual contributors..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
