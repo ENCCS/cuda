@@ -16,7 +16,7 @@ First, we want to ask API how many CUDA+capable devices are available, which is 
 
    .. code-block:: CUDA
       
-      __host__ ​__device__​ cudaError_t cudaGetDeviceCount(int* numDevices)
+      __host__ __device__ cudaError_t cudaGetDeviceCount(int* numDevices)
 
 The function calls the API and returns the number of the available devices in the address provided as a first argument.
 There are a couple of things to notice here.
@@ -38,7 +38,7 @@ To populate the |cudaDeviceProp| structure, CUDA has |cudaGetDeviceProperties| f
          
    .. code-block:: c++
 
-      __host__​ cudaError_t cudaGetDeviceProperties(cudaDeviceProp* prop, int deviceId)
+      __host__ cudaError_t cudaGetDeviceProperties(cudaDeviceProp* prop, int deviceId)
 
 The function has a |__host__| specifier, which means that one can not call it from the device code.
 It also returns |cudaError_t| structure, which can be |cudaErrorInvalidDevice| in case we are trying to get properties of a non-existing device (e.g. when ``deviceId`` is larger than ``numDevices`` above).

@@ -98,7 +98,7 @@ Not to overload the code with extra checks after every API call, we are going to
 
     .. code-block:: cuda
 
-        __host__​ __device__​ cudaError_t cudaGetLastError(void)
+        __host__ __device__ cudaError_t cudaGetLastError(void)
 
 This function will check if there were any CUDA API errors in the previous calls and should return |cudaSuccess| if there were none.
 We will check this, and print an error message if this was not the case.
@@ -108,7 +108,7 @@ In order to render a human-friendly string that describes an error, the |cudaGet
 
     .. code-block:: cuda
 
-        __host__​ __device__ ​const char* cudaGetErrorString(cudaError_t error)
+        __host__ __device__ const char* cudaGetErrorString(cudaError_t error)
 
 This will return a string, that we are going to print in case there were errors.
 

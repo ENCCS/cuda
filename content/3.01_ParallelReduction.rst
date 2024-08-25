@@ -87,7 +87,7 @@ So either extra condition should be added ot the array should be extended by zer
     
            .. code-block:: CUDA
 
-               __host__​ cudaError_t cudaMemset(void* devPtr, int  value, size_t count)
+               __host__ cudaError_t cudaMemset(void* devPtr, int  value, size_t count)
 
 
     4. Create the CUDA kernel that will use ``atomicAdd(..)`` to accumulate the data.
