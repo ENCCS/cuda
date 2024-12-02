@@ -1,0 +1,12 @@
+.. _cuda_to_hip:
+
+From CUDA to HIP
+================
+
+1. Performance and performance portability
+------------------------------------------
+
+2. Tools for HIPification
+-------------------------   
+
+
